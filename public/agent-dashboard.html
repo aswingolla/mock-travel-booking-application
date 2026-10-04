@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxfly -  Travel Agent Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* Luxfly design system -  dashboards */
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --border: #262C38; --surface: #161C26;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --border: #262C38; --surface: #161C26;
+      color-scheme: dark;
+    }
+    body { background: var(--bg) !important; color: var(--fg) !important; margin: 0; }
+    .site-header { background: var(--navy) !important; border-bottom: 1px solid rgba(201,148,58,0.25) !important; }
+    .logo, .logo-icon, .logo-text { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+    .page-header-title, h1 { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+    .dashboard-card, .stat-card { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 14px !important; }
+    .stat-value { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .stat-label { color: var(--fg-muted) !important; }
+    .btn.btn-primary, .btn-primary { background: var(--gold) !important; color: #fff !important; border: none !important; border-radius: 10px !important; font-weight: 600 !important; }
+    .btn.btn-primary:hover, .btn-primary:hover { opacity: 0.88 !important; }
+    table { background: var(--surface) !important; border-radius: 14px !important; }
+    th { color: var(--fg-muted) !important; background: color-mix(in srgb, var(--border) 40%, var(--surface)) !important; font-size: 0.72rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; }
+    td { color: var(--fg) !important; border-bottom-color: var(--border) !important; }
+    .badge-gold { background: color-mix(in srgb, var(--gold) 15%, var(--surface)) !important; color: var(--gold) !important; border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent) !important; }
+    .field-input, .field-select { background: var(--surface) !important; border-color: var(--border) !important; color: var(--fg) !important; border-radius: 10px !important; }
+    .field-input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent) !important; }
+  </style>
+</head>
+<body class="page-dashboard">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="dash-wrap" data-testid="agent-dashboard">
+
+      <div class="dash-header-bar">
+        <div>
+          <div class="dash-access-badge dash-access-agent" data-testid="agent-access-badge">🏢 Travel Agent Portal</div>
+          <h1 class="dash-title" id="dash-title">Welcome back</h1>
+          <p class="dash-subtitle" id="dash-subtitle">Your bookings and exclusive offers at a glance.</p>
+        </div>
+        <a href="index.html" class="btn btn-search" data-testid="btn-search-flights" style="align-self:center;">🔍 Search flights</a>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="dash-grid">
+        <div class="dash-card" data-testid="agent-stat-bookings">
+          <div class="dash-card-title">Bookings this month</div>
+          <div class="dash-card-value" id="stat-bookings"> - </div>
+          <div class="dash-card-sub">confirmed bookings</div>
+        </div>
+        <div class="dash-card" data-testid="agent-stat-commission">
+          <div class="dash-card-title">Commission earned</div>
+          <div class="dash-card-value" id="stat-commission"> - </div>
+          <div class="dash-card-sub">estimated at 8%</div>
+        </div>
+        <div class="dash-card" data-testid="agent-stat-clients">
+          <div class="dash-card-title">Active clients</div>
+          <div class="dash-card-value" id="stat-clients">12</div>
+          <div class="dash-card-sub">this quarter</div>
+        </div>
+        <div class="dash-card" data-testid="agent-stat-avg-ticket">
+          <div class="dash-card-title">Avg ticket value</div>
+          <div class="dash-card-value" id="stat-avg-ticket">$1,240</div>
+          <div class="dash-card-sub">per booking</div>
+        </div>
+      </div>
+
+      <!-- Coupons -->
+      <section aria-labelledby="coupons-heading" data-testid="agent-coupons">
+        <h2 class="dash-section-title" id="coupons-heading">Your exclusive offers</h2>
+        <div class="coupon-strip" id="coupon-strip">
+          <div class="coupon-strip-heading">Loading offers…</div>
+        </div>
+      </section>
+
+      <!-- Bookings table -->
+      <section aria-labelledby="bookings-heading">
+        <h2 class="dash-section-title" id="bookings-heading">Recent bookings</h2>
+        <div class="dash-table-wrap" data-testid="agent-bookings-table">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Ref</th>
+                <th>Route</th>
+                <th>Date</th>
+                <th>Passengers</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+              <tr><td colspan="5" style="text-align:center;color:var(--clr-text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2024 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderAuthNav();
+
+      const user = getCurrentUser();
+      if (!user || user.role !== 'travel_agent') {
+        window.location.href = 'login?returnTo=agent-dashboard';
+        return;
+      }
+
+      document.getElementById('dash-title').textContent = `Welcome back, ${user.firstName}`;
+      document.getElementById('dash-subtitle').textContent =
+        `${user.agencyName || 'Your agency'} (${user.agencyCode || ' - '})`;
+
+      // Read bookings from in-memory DB, filtered to this agent's bookings
+      let bookings = [];
+      try {
+        const all = Array.isArray(_DB.bookings) ? _DB.bookings : [];
+        bookings = all.filter(b => !b.userId || b.userId === user.id);
+      } catch (_) {}
+
+      // Stats
+      const count = bookings.length;
+      const avgTicket = 1240;
+      const commission = Math.round(count * avgTicket * 0.08);
+      document.getElementById('stat-bookings').textContent = count;
+      document.getElementById('stat-commission').textContent = `$${commission.toLocaleString()}`;
+
+      // Bookings table
+      const tbody = document.getElementById('bookings-tbody');
+      if (bookings.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--clr-text-muted);">No bookings yet</td></tr>';
+      } else {
+        tbody.innerHTML = [...bookings].sort((a,b) => new Date(b.bookedAt||0) - new Date(a.bookedAt||0)).map(b => {
+          const statusClass = b.status === 'confirmed' ? 'status-confirmed'
+                            : b.status === 'cancelled' ? 'status-cancelled'
+                            : 'status-pending';
+          const totalPax = (b.adultsCount || 0) + (b.childrenCount || 0) + (b.infantsCount || 0) || b.passengers || 1;
+          return `<tr data-testid="booking-row-${b.id}">
+            <td><strong>${b.id}</strong></td>
+            <td>${b.origin || ' - '} → ${b.destination || ' - '}</td>
+            <td>${b.departDate || ' - '}</td>
+            <td>${totalPax}</td>
+            <td><span class="status-chip ${statusClass}">${b.status || 'pending'}</span></td>
+          </tr>`;
+        }).join('');
+      }
+
+      // Coupons
+      const strip = document.getElementById('coupon-strip');
+      try {
+        const coupons = await getCoupons('travel_agent');
+        if (coupons.length === 0) {
+          strip.innerHTML = '<div class="coupon-strip-heading">No offers available at this time.</div>';
+        } else {
+          strip.innerHTML = `
+            <div class="coupon-strip-heading">Exclusive agent offers</div>
+            ${coupons.map(c => `
+              <div class="coupon-card" data-testid="coupon-card-${c.id}">
+                <span class="coupon-icon" aria-hidden="true">🏷️</span>
+                <div class="coupon-body">
+                  <div class="coupon-code" title="Click to copy" data-code="${c.code}" data-testid="coupon-code-${c.id}" style="cursor:pointer;">${c.code}</div>
+                  <div class="coupon-desc">${c.description}</div>
+                  <div class="coupon-terms">${c.terms || ''}</div>
+                </div>
+                <span class="coupon-badge">${c.discountType === 'percentage' ? c.discountValue + '% off' : c.discountType === 'fixed' ? '$' + c.discountValue + ' off' : 'Upgrade'}</span>
+              </div>`).join('')}`;
+          strip.querySelectorAll('.coupon-code[data-code]').forEach(el => {
+            el.addEventListener('click', () => {
+              navigator.clipboard.writeText(el.dataset.code).catch(() => {});
+              const orig = el.textContent;
+              el.textContent = 'Copied!';
+              setTimeout(() => { el.textContent = orig; }, 1500);
+            });
+          });
+        }
+      } catch (_) {
+        strip.innerHTML = '<div class="coupon-strip-heading">Unable to load offers.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

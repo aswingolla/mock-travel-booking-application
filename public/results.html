@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flight Results -  Luxfly</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* ── Luxfly design system -  inner pages ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --navy-light: #142843;
+      --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+        --border: #262C38; --surface: #161C26; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+      --border: #262C38; --surface: #161C26; color-scheme: dark;
+    }
+    body { background: var(--bg); color: var(--fg); margin: 0; }
+
+    /* Header */
+    .site-header {
+      background: var(--navy) !important;
+      border-bottom: 1px solid rgba(201,148,58,0.25) !important;
+    }
+    .logo { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; font-size: 1.3rem !important; }
+    .logo-icon { color: var(--gold) !important; }
+    .logo-text { color: var(--gold) !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+
+    /* Footer */
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+
+    /* Page background */
+    .page-results { background: var(--bg) !important; }
+
+    /* Search summary bar */
+    .search-summary { background: var(--navy-light) !important; }
+    .search-summary-route { color: #fff !important; font-family: 'Playfair Display', Georgia, serif !important; font-weight: 700 !important; font-size: 1.1rem !important; }
+    .search-summary-details { color: rgba(255,255,255,0.65) !important; }
+    .btn-modify {
+      background: var(--gold) !important;
+      color: #fff !important;
+      border-radius: 8px !important;
+      font-weight: 600 !important;
+      border: none !important;
+    }
+    .btn-modify:hover { opacity: 0.9 !important; }
+
+    /* Filters panel */
+    .filters-panel {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 14px !important;
+    }
+    .filters-heading { color: var(--fg) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .filter-group-label { color: var(--fg-mid) !important; font-weight: 600 !important; text-transform: uppercase !important; font-size: 0.72rem !important; letter-spacing: 0.06em !important; }
+    .filter-option { color: var(--fg) !important; }
+    .filter-option input[type="checkbox"]:checked { accent-color: var(--gold) !important; }
+    input[type="range"] { accent-color: var(--gold) !important; }
+    #price-display { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+
+    /* Flight cards */
+    .flight-card {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 14px !important;
+      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s !important;
+    }
+    .flight-card:hover {
+      border-color: var(--gold) !important;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.1) !important;
+      transform: translateY(-2px) !important;
+    }
+    .flight-airline { color: var(--navy) !important; font-weight: 700 !important; }
+    @media (prefers-color-scheme: dark) { .flight-airline { color: var(--gold) !important; } }
+    .flight-time { color: var(--fg) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .flight-duration { color: var(--fg-mid) !important; }
+    .flight-stops.direct { color: var(--gold) !important; font-weight: 600 !important; }
+    .flight-price { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; font-size: 1.5rem !important; font-weight: 700 !important; }
+    .flight-price-label { color: var(--fg-muted) !important; }
+    .flight-price-total { color: var(--fg-mid) !important; }
+    .flight-class-badge { background: color-mix(in srgb, var(--gold) 12%, var(--surface)) !important; color: var(--gold) !important; border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent) !important; }
+    .flight-seats.low { color: #dc2626 !important; font-weight: 600 !important; }
+
+    /* Select button */
+    .btn.btn-primary, .btn-primary {
+      background: var(--gold) !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-weight: 600 !important;
+      transition: opacity 0.15s !important;
+    }
+    .btn.btn-primary:hover, .btn-primary:hover { opacity: 0.88 !important; }
+
+    /* Sort bar */
+    .sort-bar { border-bottom: 1px solid var(--border) !important; }
+    .results-count { color: var(--fg-mid) !important; }
+    .field-select { background: var(--surface) !important; color: var(--fg) !important; border-color: var(--border) !important; border-radius: 8px !important; }
+  </style>
+</head>
+<body class="page-results">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== SEARCH SUMMARY ===== -->
+  <section class="search-summary" aria-label="Current search" data-testid="search-summary">
+    <div class="container search-summary-inner">
+      <div>
+        <div class="search-summary-route" data-testid="summary-route">Sydney → Melbourne</div>
+        <div class="search-summary-details" data-testid="summary-details"> -  · 1 passenger · Economy</div>
+      </div>
+      <a href="index.html" class="btn-modify" aria-label="Modify search" data-testid="btn-modify-search">
+        Modify search
+      </a>
+    </div>
+  </section>
+
+  <main id="main-content">
+    <div class="container results-layout">
+
+      <!-- ===== FILTERS SIDEBAR ===== -->
+      <aside class="filters-panel" aria-label="Filter flights" data-testid="filters-panel">
+        <h2 class="filters-heading">Filter</h2>
+
+        <!-- Stops -->
+        <div class="filter-group" data-testid="filter-stops">
+          <span class="filter-group-label" id="stops-label">Stops</span>
+          <label class="filter-option">
+            <input type="checkbox" name="stops" value="0" data-testid="filter-direct" aria-labelledby="stops-label" />
+            Direct only
+          </label>
+          <label class="filter-option">
+            <input type="checkbox" name="stops" value="1" data-testid="filter-one-stop" aria-labelledby="stops-label" />
+            1 stop
+          </label>
+        </div>
+
+        <!-- Airlines -->
+        <div class="filter-group" data-testid="filter-airlines">
+          <span class="filter-group-label" id="airlines-label">Airlines</span>
+          <div id="airline-filters" role="group" aria-labelledby="airlines-label">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Max price -->
+        <div class="filter-group" data-testid="filter-price">
+          <label class="filter-group-label" for="max-price">Max price</label>
+          <div style="display:flex;align-items:center;gap:.75rem;">
+            <input
+              type="range"
+              id="max-price"
+              min="0"
+              max="1000"
+              step="10"
+              value="1000"
+              style="flex:1;"
+              data-testid="input-max-price"
+              aria-label="Maximum price"
+            />
+            <span id="price-display" data-testid="price-display" style="font-weight:700;min-width:4ch;">$1000</span>
+          </div>
+        </div>
+
+        <!-- Reset -->
+        <button class="btn btn-primary" id="reset-filters" data-testid="btn-reset-filters"
+          aria-label="Reset all filters" style="width:100%;margin-top:.5rem;">
+          Reset filters
+        </button>
+      </aside>
+
+      <!-- ===== RESULTS PANEL ===== -->
+      <section aria-label="Flight results">
+
+        <!-- Sort bar -->
+        <div class="sort-bar" data-testid="sort-bar">
+          <p class="results-count" id="results-count" aria-live="polite" data-testid="results-count">
+            Searching…
+          </p>
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <label for="sort-select" class="sr-only">Sort by</label>
+            <div class="select-wrapper" style="width:auto;">
+              <select id="sort-select" class="field-select" style="padding:.5rem 2.5rem .5rem .75rem;"
+                aria-label="Sort flights by" data-testid="select-sort">
+                <option value="price-asc">Price: Low to high</option>
+                <option value="price-desc">Price: High to low</option>
+                <option value="depart-asc">Departure: Earliest</option>
+                <option value="depart-desc">Departure: Latest</option>
+                <option value="duration-asc">Duration: Shortest</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flight cards -->
+        <div id="flights-list" class="flights-list" data-testid="results-list" aria-label="Available flights">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script src="js/results.js?v=3"></script>
+</body>
+</html>

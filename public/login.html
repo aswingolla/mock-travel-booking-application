@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In -  Luxfly</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #C9943A;
+      --gold-light: #f5c842;
+      --navy: #0E1E35;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      background: #071320;
+      color: #fff;
+      padding-top: 33px;
+    }
+
+    /* ── Mock app banner ── */
+    .mock-banner {
+      background: #1a1200;
+      color: #f5c842;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 7px 16px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      border-bottom: 1px solid rgba(245,200,66,0.25);
+    }
+
+    /* ── Full-bleed scene ── */
+    .login-scene {
+      position: relative;
+      min-height: calc(100vh - 34px);
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* Photo layer */
+    .scene-photo {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1537956965359-7573183d1f57?w=1600&q=90&auto=format&fit=crop&crop=center');
+      background-size: cover;
+      background-position: center center;
+    }
+
+    /* Gradient overlay -  dark on left for text, lighter on right for card */
+    .scene-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(5,15,30,0.72) 0%,
+        rgba(5,15,30,0.55) 45%,
+        rgba(5,15,30,0.18) 100%
+      );
+    }
+
+    /* ── Layout: left copy + right card ── */
+    .login-layout {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+      gap: 0;
+      padding: 0 4vw;
+      align-items: center;
+    }
+
+    /* ── Left: branding + copy ── */
+    .login-left {
+      padding: 3rem 2rem 3rem 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: calc(100vh - 34px);
+    }
+
+    .ll-top { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    /* Logo */
+    .ll-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      margin-bottom: 3rem;
+      position: absolute;
+      top: 2.2rem;
+      left: calc(4vw);
+    }
+    .ll-logo-icon {
+      width: 38px; height: 38px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .ll-logo-sub {
+      font-size: 0.7rem;
+      font-weight: 300;
+      color: rgba(255,255,255,0.65);
+      margin-top: 1px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Hero text */
+    .ll-heading {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: #fff;
+      text-shadow: 0 2px 32px rgba(0,0,0,0.5);
+      margin-bottom: 1.25rem;
+    }
+    .ll-heading em {
+      font-style: italic;
+      color: var(--gold-light);
+      display: block;
+    }
+    .ll-sub {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.78);
+      font-weight: 300;
+      line-height: 1.65;
+      max-width: 420px;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.4);
+      margin-bottom: 2.5rem;
+    }
+
+    /* Stat badges row */
+    .ll-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .ll-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .ll-stat-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+    .ll-stat-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.01em;
+    }
+    .ll-stat-desc {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* Photo credit */
+    .ll-credit {
+      font-size: 0.62rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 2rem;
+    }
+    .ll-credit a { color: inherit; text-decoration: none; }
+
+    /* ── Right: glass login card ── */
+    .login-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border-radius: 24px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 2px 0 rgba(255,255,255,0.6) inset;
+      color: #1a1714;
+      width: 100%;
+      max-width: 440px;
+      margin: 2rem 0 2rem auto;
+    }
+
+    .lc-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1.75rem;
+      text-decoration: none;
+    }
+    .lc-logo-icon {
+      width: 32px; height: 32px;
+      background: var(--gold);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+
+    .lc-heading {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .lc-sub {
+      font-size: 0.88rem;
+      color: #6b7280;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Avatar role picker */
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .avatar-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 4px;
+      background: #f8f7f5;
+      border: 2px solid #e5e0d8;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+      font-family: inherit;
+      color: #1a1714;
+    }
+    .avatar-btn:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .avatar-btn.selected {
+      border-color: var(--gold);
+      background: #fef9f0;
+      box-shadow: 0 0 0 3px rgba(201,148,58,0.18);
+    }
+    .avatar-emoji {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8f4fd, #d1e8f7);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+    }
+    .avatar-btn.selected .avatar-emoji {
+      background: linear-gradient(135deg, #fef3dc, #fde8b4);
+    }
+    .avatar-name { font-size: 0.65rem; font-weight: 600; text-align: center; line-height: 1.2; color: #374151; }
+    .avatar-role { font-size: 0.58rem; color: #9ca3af; text-align: center; }
+
+    /* Divider */
+    .lc-divider {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin: 0.25rem 0 1rem;
+      position: relative;
+    }
+    .lc-divider::before, .lc-divider::after {
+      content: '';
+      position: absolute;
+      top: 50%; width: 36%;
+      height: 1px; background: #e5e7eb;
+    }
+    .lc-divider::before { left: 0; }
+    .lc-divider::after  { right: 0; }
+
+    /* Form */
+    .lc-form { display: flex; flex-direction: column; gap: 0.85rem; }
+    .lc-field { display: flex; flex-direction: column; gap: 4px; }
+    .lc-label { font-size: 0.8rem; font-weight: 600; color: #374151; }
+    .lc-input-wrap { position: relative; }
+    .lc-input-icon {
+      position: absolute;
+      left: 13px; top: 50%; transform: translateY(-50%);
+      color: #9ca3af; font-size: 0.95rem; pointer-events: none;
+    }
+    .lc-input {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.93rem;
+      font-family: inherit;
+      background: #fff;
+      color: #111;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .lc-input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,148,58,0.15); }
+    .lc-input.is-error { border-color: #ef4444; }
+    .lc-error { font-size: 0.75rem; color: #ef4444; min-height: 14px; }
+
+    .lc-submit {
+      width: 100%; padding: 13px;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      margin-top: 2px;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .lc-submit:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .lc-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .lc-guest {
+      width: 100%; padding: 11px;
+      background: #fff;
+      color: #374151;
+      border: 1.5px dashed #d1d5db;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .lc-guest:hover { border-color: var(--gold); color: var(--gold); }
+
+    .lc-footer { text-align: center; font-size: 0.82rem; color: #6b7280; margin-top: 1.1rem; }
+    .lc-footer a { color: var(--gold); text-decoration: none; font-weight: 600; }
+
+    /* Simple footer bar */
+    .simple-footer {
+      background: #040d18;
+      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+      font-size: 0.72rem; color: rgba(255,255,255,0.35);
+    }
+    .simple-footer a { color: rgba(255,255,255,0.45); text-decoration: none; }
+    .simple-footer a:hover { color: #fff; }
+
+    /* ── Mobile ── */
+    @media (max-width: 860px) {
+      .login-layout { grid-template-columns: 1fr; padding: 1.5rem; }
+      .login-left { min-height: 0; padding: 6rem 0 2rem; }
+      .ll-logo { top: 1.5rem; left: 1.5rem; }
+      .login-card { margin: 0 auto 2rem; max-width: 100%; }
+      .ll-stats { gap: 1rem; }
+      .ll-heading { font-size: clamp(2rem, 8vw, 3rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mock-banner">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <div class="login-scene">
+    <div class="scene-photo"></div>
+    <div class="scene-overlay"></div>
+
+    <div class="login-layout">
+
+      <!-- ── Left copy ── -->
+      <div class="login-left">
+
+        <a href="index.html" class="ll-logo" data-testid="logo">
+          <span class="ll-logo-icon" aria-hidden="true">✈</span>
+          <span>
+            <span style="display:block;">Luxfly</span>
+            <span class="ll-logo-sub">Travel More. Live Brighter.</span>
+          </span>
+        </a>
+
+        <div class="ll-top">
+          <h1 class="ll-heading">
+            Discover<br>
+            <em>Extraordinary</em>
+            Journeys
+          </h1>
+          <p class="ll-sub">Exclusive deals. Unforgettable places.<br>A more rewarding way to fly.</p>
+
+          <div class="ll-stats">
+            <div class="ll-stat">
+              <div class="ll-stat-icon" aria-hidden="true">🏷️</div>
+              <div class="ll-stat-val">Best Deals</div>
+              <div class="ll-stat-desc">Around the world</div>
+            </div>
+            <div class="ll-stat">
+              <div class="ll-stat-icon" aria-hidden="true">🌐</div>
+              <div class="ll-stat-val">Global Routes</div>
+              <div class="ll-stat-desc">500+ destinations</div>
+            </div>
+            <div class="ll-stat">
+              <div class="ll-stat-icon" aria-hidden="true">👑</div>
+              <div class="ll-stat-val">Premium</div>
+              <div class="ll-stat-desc">Premier experience</div>
+            </div>
+          </div>
+
+          <div class="ll-credit"><a href="https://unsplash.com" target="_blank" rel="noopener">Photo: Unsplash</a></div>
+        </div>
+
+      </div>
+
+      <!-- ── Right glass card ── -->
+      <div class="login-card" data-testid="login-card">
+
+        <a href="index.html" class="lc-logo" data-testid="logo-card">
+          <span class="lc-logo-icon" aria-hidden="true">✈</span>
+          <em style="font-style:italic;font-family:'Playfair Display',Georgia,serif;">Luxfly</em>
+        </a>
+
+        <h2 class="lc-heading" data-testid="login-heading">Welcome Back</h2>
+        <p class="lc-sub">Sign in to continue your journey</p>
+
+        <!-- Avatar role picker -->
+        <div class="avatar-grid" role="group" aria-label="Select a demo account" data-testid="avatar-grid">
+
+          <button type="button" class="avatar-btn selected"
+            data-email="mick.passenger@luxfly.test" data-pw="Mick1234"
+            data-testid="avatar-passenger" aria-pressed="true">
+            <span class="avatar-emoji" aria-hidden="true">🧳</span>
+            <span class="avatar-name">Mick<br>Traveller</span>
+            <span class="avatar-role">Passenger</span>
+          </button>
+
+          <button type="button" class="avatar-btn"
+            data-email="mick.agent@luxfly.test" data-pw="Mick1234"
+            data-testid="avatar-agent" aria-pressed="false">
+            <span class="avatar-emoji" aria-hidden="true">🏢</span>
+            <span class="avatar-name">Mick<br>Reynolds</span>
+            <span class="avatar-role">Travel Agent</span>
+          </button>
+
+          <button type="button" class="avatar-btn"
+            data-email="mick.operator@luxfly.test" data-pw="Mick1234"
+            data-testid="avatar-operator" aria-pressed="false">
+            <span class="avatar-emoji" aria-hidden="true">✈️</span>
+            <span class="avatar-name">Mick<br>Norris</span>
+            <span class="avatar-role">Operator</span>
+          </button>
+
+          <button type="button" class="avatar-btn"
+            data-email="mick.admin@luxfly.test" data-pw="Mick1234"
+            data-testid="avatar-admin" aria-pressed="false">
+            <span class="avatar-emoji" aria-hidden="true">🛡️</span>
+            <span class="avatar-name">Mick<br>Stone</span>
+            <span class="avatar-role">Admin</span>
+          </button>
+
+        </div>
+
+        <div class="lc-divider">or enter credentials</div>
+
+        <form id="login-form" class="lc-form" novalidate data-testid="login-form">
+
+          <div class="lc-field" data-testid="field-login-email">
+            <label for="li-email" class="lc-label">Email address</label>
+            <div class="lc-input-wrap">
+              <span class="lc-input-icon" aria-hidden="true">✉</span>
+              <input type="email" id="li-email" name="email" class="lc-input"
+                placeholder="you@example.com" autocomplete="email"
+                aria-required="true" data-testid="input-login-email" />
+            </div>
+            <span id="err-email" class="lc-error" role="alert" aria-live="polite" data-testid="error-login-email"></span>
+          </div>
+
+          <div class="lc-field" data-testid="field-login-password">
+            <label for="li-password" class="lc-label">Password</label>
+            <div class="lc-input-wrap">
+              <span class="lc-input-icon" aria-hidden="true">🔒</span>
+              <input type="password" id="li-password" name="password" class="lc-input"
+                placeholder="Your password" autocomplete="current-password"
+                aria-required="true" data-testid="input-login-password" />
+            </div>
+            <span id="err-password" class="lc-error" role="alert" aria-live="polite" data-testid="error-login-password"></span>
+          </div>
+
+          <span id="err-global" class="lc-error" role="alert" aria-live="polite"
+            style="text-align:center;" data-testid="error-login-global"></span>
+
+          <button type="submit" class="lc-submit" data-testid="btn-login-submit">
+            Sign In →
+          </button>
+
+        </form>
+
+        <div class="lc-divider" style="margin-top:1rem;">or</div>
+
+        <button type="button" class="lc-guest" id="btn-guest" data-testid="btn-guest-login"
+          aria-label="Continue as guest without signing in">
+          <span aria-hidden="true">👤</span> Continue as guest
+        </button>
+
+        <p class="lc-footer" data-testid="login-signup-link">
+          Don't have an account? <a href="signup.html">Sign up</a>
+        </p>
+
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="simple-footer" data-testid="site-footer">
+    <span>&copy; 2026 Luxfly -  Practice app for testing workshops.</span>
+    <nav aria-label="Footer navigation" style="display:flex;gap:16px;">
+      <a href="#" data-testid="footer-privacy">Privacy</a>
+      <a href="#" data-testid="footer-terms">Terms</a>
+      <a href="#" data-testid="footer-contact">Contact</a>
+    </nav>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      await waitForMSW();
+      if (getCurrentUser()) {
+        const me = getCurrentUser();
+        window.location.href = ROLE_DASHBOARD[me.role] || '/';
+        return;
+      }
+
+      const emailEl = document.getElementById('li-email');
+      const pwEl    = document.getElementById('li-password');
+      const form    = document.getElementById('login-form');
+      const avatars = document.querySelectorAll('.avatar-btn');
+
+      avatars.forEach(btn => {
+        btn.addEventListener('click', () => {
+          avatars.forEach(b => { b.classList.remove('selected'); b.setAttribute('aria-pressed','false'); });
+          btn.classList.add('selected');
+          btn.setAttribute('aria-pressed','true');
+          emailEl.value = btn.dataset.email;
+          pwEl.value    = btn.dataset.pw;
+          document.getElementById('err-global').textContent = '';
+        });
+      });
+
+      if (avatars[0]) {
+        emailEl.value = avatars[0].dataset.email;
+        pwEl.value    = avatars[0].dataset.pw;
+      }
+
+      function setErr(id, msg) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = msg;
+      }
+
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        setErr('err-email',''); setErr('err-password',''); setErr('err-global','');
+
+        let ok = true;
+        if (!emailEl.value.trim()) { setErr('err-email','Email is required.'); emailEl.classList.add('is-error'); ok = false; }
+        if (!pwEl.value)           { setErr('err-password','Password is required.'); pwEl.classList.add('is-error'); ok = false; }
+        if (!ok) return;
+
+        const btn = form.querySelector('[data-testid="btn-login-submit"]');
+        btn.disabled = true; btn.textContent = 'Signing in…';
+
+        try {
+          const user = await loginUser(emailEl.value.trim(), pwEl.value);
+          const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+          window.location.href = returnTo || ROLE_DASHBOARD[user.role] || '/';
+        } catch (err) {
+          setErr('err-global', err.message || 'Sign in failed. Check your credentials.');
+          btn.disabled = false; btn.textContent = 'Sign In →';
+        }
+      });
+
+      emailEl.addEventListener('input', () => { emailEl.classList.remove('is-error'); setErr('err-email',''); });
+      pwEl.addEventListener('input',    () => { pwEl.classList.remove('is-error');    setErr('err-password',''); });
+
+      document.getElementById('btn-guest').addEventListener('click', () => {
+        const guest = {
+          id: 'guest', email: 'guest@luxfly.test',
+          firstName: 'Guest', lastName: 'User',
+          role: 'passenger', isGuest: true,
+        };
+        localStorage.setItem('lf_user', JSON.stringify(guest));
+        const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+        window.location.href = returnTo || '/';
+      });
+    });
+  </script>
+</body>
+</html>

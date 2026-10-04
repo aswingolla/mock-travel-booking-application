@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Passenger Details -  Luxfly</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* ── Luxfly design system -  inner pages ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --navy-light: #142843;
+      --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+        --border: #262C38; --surface: #161C26; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+      --border: #262C38; --surface: #161C26; color-scheme: dark;
+    }
+    body { background: var(--bg); color: var(--fg); margin: 0; }
+
+    /* Header */
+    .site-header { background: var(--navy) !important; border-bottom: 1px solid rgba(201,148,58,0.25) !important; }
+    .logo { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .logo-icon, .logo-text { color: var(--gold) !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+
+    /* Footer */
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+
+    /* Steps */
+    .step.done .step-circle { background: var(--gold) !important; border-color: var(--gold) !important; color: #fff !important; }
+    .step.active .step-circle { border-color: var(--navy) !important; color: var(--navy) !important; font-weight: 700 !important; }
+    .step-label { color: var(--fg-mid) !important; }
+    .step.active .step-label, .step.done .step-label { color: var(--navy) !important; }
+    @media (prefers-color-scheme: dark) {
+      .step.active .step-label, .step.done .step-label { color: var(--gold) !important; }
+      .step.active .step-circle { border-color: var(--gold) !important; color: var(--gold) !important; }
+    }
+    .step-connector.done { background: var(--gold) !important; }
+
+    /* Breadcrumb */
+    .breadcrumb a { color: var(--gold) !important; }
+    .breadcrumb-current { color: var(--fg-mid) !important; }
+    .breadcrumb-sep { color: var(--border) !important; }
+
+    /* Headings */
+    h1 { font-family: 'Playfair Display', Georgia, serif !important; }
+
+    /* Passenger / contact cards */
+    .passenger-card {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 14px !important;
+    }
+    .passenger-heading { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+
+    /* Form fields */
+    .field-label { color: var(--fg-mid) !important; font-weight: 600 !important; font-size: 0.82rem !important; }
+    .field-input {
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
+      color: var(--fg) !important;
+      border-radius: 10px !important;
+    }
+    .field-input:focus { border-color: var(--gold) !important; outline: none !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent) !important; }
+    .field-select { background: var(--surface) !important; color: var(--fg) !important; border-color: var(--border) !important; border-radius: 10px !important; }
+    .field-error { color: #dc2626 !important; }
+
+    /* Buttons */
+    .btn { border-radius: 10px !important; font-weight: 600 !important; }
+    .btn.btn-search, .btn-search {
+      background: var(--gold) !important;
+      color: #fff !important;
+      border: none !important;
+    }
+    .btn.btn-search:hover, .btn-search:hover { opacity: 0.88 !important; }
+    /* Back button */
+    [data-testid="btn-back-flight"] { background: var(--border) !important; color: var(--fg) !important; border: none !important; }
+  </style>
+</head>
+<body class="page-passengers">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container" style="padding-top:2rem;padding-bottom:3rem;">
+
+      <!-- Step indicator -->
+      <nav class="steps" aria-label="Booking progress" data-testid="booking-steps">
+        <div class="step done"   data-testid="step-search">
+          <div class="step-circle" aria-hidden="true">✓</div>
+          <span class="step-label">Search</span>
+        </div>
+        <div class="step-connector done" aria-hidden="true"></div>
+        <div class="step done"   data-testid="step-flight">
+          <div class="step-circle" aria-hidden="true">✓</div>
+          <span class="step-label">Flight</span>
+        </div>
+        <div class="step-connector done" aria-hidden="true"></div>
+        <div class="step active" data-testid="step-passengers">
+          <div class="step-circle" aria-current="step">3</div>
+          <span class="step-label">Passengers</span>
+        </div>
+        <div class="step-connector" aria-hidden="true"></div>
+        <div class="step"         data-testid="step-confirm">
+          <div class="step-circle">4</div>
+          <span class="step-label">Confirm</span>
+        </div>
+      </nav>
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb" data-testid="breadcrumb">
+        <a href="index.html"            data-testid="breadcrumb-home">Search</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="javascript:history.back()" data-testid="breadcrumb-results">Results</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="javascript:history.go(-1)" data-testid="breadcrumb-flight">Flight</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span class="breadcrumb-current" aria-current="page">Passengers</span>
+      </nav>
+
+      <h1 style="font-size:1.75rem;font-weight:800;margin-bottom:1.5rem;" data-testid="passengers-heading">
+        Passenger details
+      </h1>
+
+      <form id="passengers-form" novalidate data-testid="passengers-form">
+
+        <div id="passengers-fields" data-testid="passengers-fields">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Contact details -->
+        <div class="passenger-card" data-testid="contact-card">
+          <h2 class="passenger-heading">Contact details</h2>
+          <div class="passenger-fields">
+            <div class="field-group" data-testid="field-email">
+              <label for="contact-email" class="field-label">Email address</label>
+              <input
+                type="email"
+                id="contact-email"
+                name="contactEmail"
+                class="field-input"
+                placeholder="you@example.com"
+                aria-required="true"
+                aria-describedby="email-err"
+                data-testid="input-contact-email"
+              />
+              <span id="email-err" class="field-error" role="alert" aria-live="polite" data-testid="error-email"></span>
+            </div>
+            <div class="field-group" data-testid="field-phone">
+              <label for="contact-phone" class="field-label">Phone number</label>
+              <input
+                type="tel"
+                id="contact-phone"
+                name="contactPhone"
+                class="field-input"
+                placeholder="+61 4xx xxx xxx"
+                aria-describedby="phone-err"
+                data-testid="input-contact-phone"
+              />
+              <span id="phone-err" class="field-error" role="alert" aria-live="polite" data-testid="error-phone"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:flex-end;">
+          <button type="button" id="btn-back"
+            class="btn"
+            style="background:var(--clr-border);color:var(--clr-text);"
+            data-testid="btn-back-flight">
+            Back
+          </button>
+          <button type="submit"
+            class="btn btn-search"
+            data-testid="btn-confirm-booking"
+            aria-label="Confirm booking">
+            Confirm booking →
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script src="js/passengers.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flight Details -  Luxfly</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* ── Luxfly design system -  inner pages ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --navy-light: #142843;
+      --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+        --border: #262C38; --surface: #161C26; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+      --border: #262C38; --surface: #161C26; color-scheme: dark;
+    }
+    body { background: var(--bg); color: var(--fg); margin: 0; }
+
+    /* Header */
+    .site-header { background: var(--navy) !important; border-bottom: 1px solid rgba(201,148,58,0.25) !important; }
+    .logo { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .logo-icon, .logo-text { color: var(--gold) !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+
+    /* Footer */
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+
+    /* Steps */
+    .step.done .step-circle { background: var(--gold) !important; border-color: var(--gold) !important; color: #fff !important; }
+    .step.active .step-circle { border-color: var(--navy) !important; color: var(--navy) !important; font-weight: 700 !important; }
+    .step-label { color: var(--fg-mid) !important; }
+    .step.active .step-label, .step.done .step-label { color: var(--navy) !important; }
+    @media (prefers-color-scheme: dark) {
+      .step.active .step-label, .step.done .step-label { color: var(--gold) !important; }
+      .step.active .step-circle { border-color: var(--gold) !important; color: var(--gold) !important; }
+    }
+    .step-connector.done { background: var(--gold) !important; }
+
+    /* Breadcrumb */
+    .breadcrumb a { color: var(--gold) !important; }
+    .breadcrumb-current { color: var(--fg-mid) !important; }
+    .breadcrumb-sep { color: var(--border) !important; }
+
+    /* Page heading */
+    .page-header-title { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+
+    /* Flight summary card */
+    .flight-card {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 14px !important;
+    }
+    .flight-airline { color: var(--navy) !important; font-weight: 700 !important; }
+    .flight-time { font-family: 'Playfair Display', Georgia, serif !important; font-size: 1.3rem !important; font-weight: 700 !important; color: var(--fg) !important; }
+    .flight-duration { color: var(--fg-mid) !important; }
+    .flight-stops.direct { color: var(--gold) !important; font-weight: 600 !important; }
+    .flight-price { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; font-size: 1.6rem !important; }
+    .flight-price-label { color: var(--fg-muted) !important; }
+    .flight-class-badge { background: color-mix(in srgb, var(--gold) 12%, var(--surface)) !important; color: var(--gold) !important; border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent) !important; }
+    .flight-seats.low { color: #dc2626 !important; font-weight: 600 !important; }
+
+    /* Journey / price cards */
+    .passenger-card {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 14px !important;
+    }
+    .passenger-heading { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+
+    /* Buttons */
+    .btn { border-radius: 10px !important; font-weight: 600 !important; }
+    .btn.btn-search, .btn-search {
+      background: var(--gold) !important;
+      color: #fff !important;
+      border: none !important;
+    }
+    .btn.btn-search:hover, .btn-search:hover { opacity: 0.88 !important; }
+
+    /* Price total */
+    [data-testid="price-total"] { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+  </style>
+</head>
+<body class="page-flight">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Step indicator -->
+    <div class="container" style="padding-top:2rem;">
+      <nav class="steps" aria-label="Booking progress" data-testid="booking-steps">
+        <div class="step done"   data-testid="step-search">
+          <div class="step-circle" aria-hidden="true">✓</div>
+          <span class="step-label">Search</span>
+        </div>
+        <div class="step-connector done" aria-hidden="true"></div>
+        <div class="step active" data-testid="step-flight">
+          <div class="step-circle" aria-current="step">2</div>
+          <span class="step-label">Flight</span>
+        </div>
+        <div class="step-connector" aria-hidden="true"></div>
+        <div class="step"         data-testid="step-passengers">
+          <div class="step-circle">3</div>
+          <span class="step-label">Passengers</span>
+        </div>
+        <div class="step-connector" aria-hidden="true"></div>
+        <div class="step"         data-testid="step-confirm">
+          <div class="step-circle">4</div>
+          <span class="step-label">Confirm</span>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container" style="padding-bottom:3rem;">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb" aria-label="Breadcrumb" data-testid="breadcrumb">
+        <a href="index.html" data-testid="breadcrumb-home">Search</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <a href="javascript:history.back()" data-testid="breadcrumb-results">Results</a>
+        <span class="breadcrumb-sep" aria-hidden="true">›</span>
+        <span class="breadcrumb-current" aria-current="page">Flight details</span>
+      </nav>
+
+      <div id="flight-detail" data-testid="flight-detail">
+        <!-- Populated by JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script src="js/flight.js?v=3"></script>
+</body>
+</html>

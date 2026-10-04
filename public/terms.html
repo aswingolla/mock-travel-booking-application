@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Luxfly Terms of Service</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #F7F4EF; --bg-card: #FFFFFF; --fg: #1A1714;
+      --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --gold-light: #F2D898;
+      --navy: #0E1E35; --navy-mid: #1C3252;
+      --border: #E2DDD7; --radius: 14px;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+        --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+        --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+        --border: #262C38; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+      --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+      --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+      --border: #262C38; color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    body { font-family: var(--body); background: var(--bg); color: var(--fg); font-size: 16px; line-height: 1.7; overflow-x: hidden; padding-top: 33px; }
+
+    .site-header {
+      position: sticky; top: 33px; z-index: 50;
+      background: rgba(14,30,53,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,148,58,0.2);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: clamp(8px,2vw,12px) clamp(16px,5vw,64px);
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      display: flex; align-items: center; justify-content: space-between; min-height: clamp(56px, 10vw, 72px);
+    }
+    .logo { font-family: var(--display); font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+    .logo-icon { color: var(--gold); margin-right: 4px; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; background: none; border: none; cursor: pointer; font-family: var(--body); padding: 0; }
+    .nav-link:hover { color: #fff; }
+    .nav-user-chip { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .nav-role-badge { background: rgba(201,148,58,0.25); color: var(--gold); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .nav-login-btn { background: var(--gold); color: #fff !important; padding: 7px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+    .nav-logout-btn { font-size: 13px; color: rgba(255,255,255,0.5) !important; }
+
+    .page-hero {
+      background: var(--navy);
+      padding: clamp(48px,8vw,80px) clamp(16px,5vw,64px) clamp(40px,6vw,64px);
+      border-bottom: 1px solid rgba(201,148,58,0.2);
+    }
+    .page-hero-inner { max-width: 800px; margin: 0 auto; }
+    .page-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .page-title { font-family: var(--display); font-size: clamp(32px,6vw,52px); font-weight: 700; color: #fff; line-height: 1.15; text-wrap: balance; }
+    .page-meta { margin-top: 16px; font-size: 13px; color: rgba(255,255,255,0.5); }
+
+    .content-wrap { max-width: 800px; margin: 0 auto; padding: clamp(40px,6vw,72px) clamp(16px,5vw,64px); }
+
+    .policy-toc {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 32px; margin-bottom: 48px;
+    }
+    .policy-toc h2 { font-family: var(--display); font-size: 17px; font-weight: 700; color: var(--fg); margin-bottom: 16px; }
+    .policy-toc ol { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .policy-toc li { font-size: 14px; }
+    .policy-toc a { color: var(--gold); text-decoration: none; font-weight: 500; }
+    .policy-toc a:hover { text-decoration: underline; }
+
+    .policy-section { margin-bottom: 48px; scroll-margin-top: 80px; }
+    .policy-section h2 {
+      font-family: var(--display); font-size: clamp(20px,3vw,26px); font-weight: 700;
+      color: var(--fg); margin-bottom: 16px; padding-bottom: 12px;
+      border-bottom: 1px solid var(--border); text-wrap: balance;
+    }
+    .policy-section h3 { font-size: 16px; font-weight: 600; color: var(--fg); margin: 24px 0 10px; }
+    .policy-section p { color: var(--fg-mid); margin-bottom: 14px; max-width: 70ch; }
+    .policy-section ul, .policy-section ol { padding-left: 20px; margin-bottom: 14px; }
+    .policy-section li { color: var(--fg-mid); margin-bottom: 6px; }
+    .policy-section strong { color: var(--fg); }
+
+    .highlight-box {
+      background: color-mix(in srgb, var(--gold) 8%, var(--bg-card));
+      border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+      border-left: 3px solid var(--gold);
+      border-radius: 8px; padding: 16px 20px; margin: 20px 0;
+    }
+    .highlight-box p { color: var(--fg-mid); margin: 0; font-size: 14px; }
+
+    .warning-box {
+      background: color-mix(in srgb, #c0392b 6%, var(--bg-card));
+      border: 1px solid color-mix(in srgb, #c0392b 25%, transparent);
+      border-left: 3px solid #c0392b;
+      border-radius: 8px; padding: 16px 20px; margin: 20px 0;
+    }
+    .warning-box p { color: var(--fg-mid); margin: 0; font-size: 14px; }
+
+    .site-footer { background: var(--navy); border-top: 1px solid rgba(201,148,58,0.15); padding: 32px clamp(16px,5vw,64px); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.4); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-link { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .footer-link:hover, .footer-link.active { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo"><span class="logo-icon">✦</span>Luxfly</a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link">Search flights</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-eyebrow">Legal</div>
+      <h1 class="page-title">Terms of Service</h1>
+      <p class="page-meta">Last updated: 1 October 2026 &nbsp;·&nbsp; Governing law: Victoria, Australia</p>
+    </div>
+  </div>
+
+  <main class="content-wrap">
+
+    <div class="highlight-box">
+      <p>Please read these Terms of Service carefully before using Luxfly. By creating an account or making a booking you agree to be bound by these terms. If you do not agree, please do not use our service.</p>
+    </div>
+
+    <nav class="policy-toc" aria-label="Table of contents">
+      <h2>Contents</h2>
+      <ol>
+        <li><a href="#about">About Luxfly</a></li>
+        <li><a href="#eligibility">Eligibility and accounts</a></li>
+        <li><a href="#bookings">Flight bookings</a></li>
+        <li><a href="#pricing">Pricing and payment</a></li>
+        <li><a href="#changes-cancellations">Changes and cancellations</a></li>
+        <li><a href="#travel-documents">Travel documents</a></li>
+        <li><a href="#liability">Limitation of liability</a></li>
+        <li><a href="#prohibited">Prohibited conduct</a></li>
+        <li><a href="#intellectual-property">Intellectual property</a></li>
+        <li><a href="#governing-law">Governing law</a></li>
+        <li><a href="#contact-terms">Contact us</a></li>
+      </ol>
+    </nav>
+
+    <section class="policy-section" id="about">
+      <h2>1. About Luxfly</h2>
+      <p>Luxfly Pty Ltd (ACN 000 123 456) ("Luxfly", "we", "us") operates an online flight search and booking platform at luxfly.com.au. We act as an intermediary between travellers and airlines; we are not an airline and we do not operate aircraft.</p>
+      <p>These Terms of Service ("Terms") govern your use of our website, mobile applications, and booking services (together, the "Service").</p>
+    </section>
+
+    <section class="policy-section" id="eligibility">
+      <h2>2. Eligibility and accounts</h2>
+      <p>You must be at least 18 years old and legally capable of entering contracts to use our Service. By registering an account you confirm that the information you provide is accurate and that you will keep it current.</p>
+      <h3>Account security</h3>
+      <p>You are responsible for maintaining the confidentiality of your account credentials. You must notify us immediately at <strong>support@luxfly.com.au</strong> if you suspect unauthorised access to your account. We are not liable for loss arising from unauthorised account use where you have failed to keep your credentials secure.</p>
+      <h3>One account per person</h3>
+      <p>You may not create more than one account per person. Accounts are personal and may not be transferred or sold.</p>
+    </section>
+
+    <section class="policy-section" id="bookings">
+      <h2>3. Flight bookings</h2>
+      <p>When you submit a booking request through Luxfly, you are making an offer to purchase a ticket from the relevant airline at the price displayed. A booking is confirmed only when you receive a booking confirmation email containing a booking reference number.</p>
+      <h3>Accuracy of information</h3>
+      <p>You are responsible for ensuring that all passenger names, dates of birth, passport numbers, and other details entered during booking are accurate. Errors in passenger names may result in denied boarding or additional fees charged by the airline.</p>
+      <h3>Fare rules</h3>
+      <p>Each fare is subject to the airline's own conditions of carriage and fare rules, which are made available during the booking process. By completing a booking you confirm you have read and accepted those conditions.</p>
+    </section>
+
+    <section class="policy-section" id="pricing">
+      <h2>4. Pricing and payment</h2>
+      <p>All prices displayed are in Australian dollars (AUD) and are inclusive of all taxes and carrier-imposed fees disclosed at the time of booking. Prices are subject to availability and may change without notice until a booking is confirmed.</p>
+      <h3>Service fees</h3>
+      <p>Luxfly may charge a service fee for bookings made through our platform. Any applicable fee will be clearly disclosed before you complete payment.</p>
+      <h3>Payment security</h3>
+      <p>Payment is processed by our PCI-DSS-compliant payment provider. Luxfly does not store your full card number. By submitting payment details you authorise us to charge the displayed total to your nominated payment method.</p>
+      <div class="warning-box">
+        <p><strong style="color:var(--fg);">Note:</strong> Luxfly is a training and demonstration platform. No real payments are processed and no actual flight tickets are issued.</p>
+      </div>
+    </section>
+
+    <section class="policy-section" id="changes-cancellations">
+      <h2>5. Changes and cancellations</h2>
+      <h3>Airline-initiated changes</h3>
+      <p>Airlines may change or cancel flights due to operational requirements, weather, or other circumstances beyond their control. We will notify you of significant changes as soon as we are informed by the airline. Your entitlements in the event of cancellation are governed by the airline's conditions of carriage and, where applicable, the Australian Consumer Law.</p>
+      <h3>Customer-initiated changes</h3>
+      <p>Your ability to change or cancel a booking depends on the fare rules of your ticket. Fees imposed by the airline for changes or cancellations are payable by the customer. Luxfly may charge an additional service fee to process changes on your behalf.</p>
+      <h3>Refunds</h3>
+      <p>Refunds are processed in accordance with the airline's fare rules and are credited to the original payment method. Processing times vary by airline and payment method; allow up to 15 business days.</p>
+    </section>
+
+    <section class="policy-section" id="travel-documents">
+      <h2>6. Travel documents</h2>
+      <p>You are solely responsible for ensuring that all passengers hold valid travel documents -  including passports, visas, and health requirements -  for their journey. Luxfly does not provide visa or immigration advice. Denied boarding due to invalid or missing documentation is not grounds for a refund from Luxfly.</p>
+      <p>Passport validity requirements vary by destination. As a general guideline, most countries require at least six months of validity beyond the date of travel.</p>
+    </section>
+
+    <section class="policy-section" id="liability">
+      <h2>7. Limitation of liability</h2>
+      <p>To the maximum extent permitted by law:</p>
+      <ul>
+        <li>Luxfly's liability for any claim arising out of your use of the Service is limited to the amount you paid for the booking giving rise to the claim</li>
+        <li>We are not liable for indirect, consequential, or special damages, including lost profits or missed connections</li>
+        <li>We are not liable for the acts or omissions of airlines, accommodation providers, or other third-party travel suppliers</li>
+      </ul>
+      <p>Nothing in these Terms limits any rights you have under the Australian Consumer Law that cannot be excluded.</p>
+    </section>
+
+    <section class="policy-section" id="prohibited">
+      <h2>8. Prohibited conduct</h2>
+      <p>When using our Service you must not:</p>
+      <ul>
+        <li>Provide false or misleading information</li>
+        <li>Use automated tools to scrape, crawl, or extract data from our platform without written permission</li>
+        <li>Attempt to gain unauthorised access to any part of our systems</li>
+        <li>Resell or transfer bookings without our prior written consent</li>
+        <li>Use the Service for any unlawful purpose</li>
+      </ul>
+      <p>Violation of these restrictions may result in immediate account suspension and, where appropriate, referral to law enforcement.</p>
+    </section>
+
+    <section class="policy-section" id="intellectual-property">
+      <h2>9. Intellectual property</h2>
+      <p>All content on the Luxfly platform -  including software, text, images, logos, and data compilations -  is owned by or licensed to Luxfly and protected by Australian and international intellectual property law. You may not reproduce, distribute, or create derivative works without our express written consent.</p>
+    </section>
+
+    <section class="policy-section" id="governing-law">
+      <h2>10. Governing law</h2>
+      <p>These Terms are governed by the laws of Victoria, Australia. Any dispute arising under these Terms will be subject to the exclusive jurisdiction of the courts of Victoria, unless you elect to resolve the dispute through a consumer dispute resolution scheme.</p>
+      <p>We may update these Terms from time to time. We will provide at least 14 days' notice of material changes by email or prominent notice on our website. Continued use of the Service after the effective date constitutes acceptance of the updated Terms.</p>
+    </section>
+
+    <section class="policy-section" id="contact-terms">
+      <h2>11. Contact us</h2>
+      <p>For questions about these Terms, please contact:</p>
+      <div class="highlight-box">
+        <p><strong style="color:var(--fg);">Legal Team</strong><br>
+        Luxfly Pty Ltd<br>
+        
+        Email: <strong style="color:var(--fg);">legal@luxfly.com.au</strong><br>
+        Phone: <strong style="color:var(--fg);">1800 589 247</strong></p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2026 Luxfly Pty Ltd. All rights reserved.</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="privacy.html" class="footer-link">Privacy</a>
+        <a href="terms.html" class="footer-link active">Terms</a>
+        <a href="contact.html" class="footer-link">Contact</a>
+        <a href="index.html" class="footer-link">Search flights</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/app.js?v=3"></script>
+  <script>document.addEventListener('DOMContentLoaded', renderAuthNav);</script>
+</body>
+</html>

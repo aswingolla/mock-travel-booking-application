@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxfly -  Airline Operator Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* Luxfly design system -  dashboards */
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --border: #262C38; --surface: #161C26;
+        color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --border: #262C38; --surface: #161C26;
+      color-scheme: dark;
+    }
+    body { background: var(--bg) !important; color: var(--fg) !important; margin: 0; }
+    .site-header { background: var(--navy) !important; border-bottom: 1px solid rgba(201,148,58,0.25) !important; }
+    .logo, .logo-icon, .logo-text { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+    .page-header-title, h1 { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+    .dashboard-card, .stat-card { background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 14px !important; }
+    .stat-value { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .stat-label { color: var(--fg-muted) !important; }
+    .btn.btn-primary, .btn-primary { background: var(--gold) !important; color: #fff !important; border: none !important; border-radius: 10px !important; font-weight: 600 !important; }
+    .btn.btn-primary:hover, .btn-primary:hover { opacity: 0.88 !important; }
+    table { background: var(--surface) !important; border-radius: 14px !important; }
+    th { color: var(--fg-muted) !important; background: color-mix(in srgb, var(--border) 40%, var(--surface)) !important; font-size: 0.72rem !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; }
+    td { color: var(--fg) !important; border-bottom-color: var(--border) !important; }
+    .badge-gold { background: color-mix(in srgb, var(--gold) 15%, var(--surface)) !important; color: var(--gold) !important; border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent) !important; }
+    .field-input, .field-select { background: var(--surface) !important; border-color: var(--border) !important; color: var(--fg) !important; border-radius: 10px !important; }
+    .field-input:focus { border-color: var(--gold) !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent) !important; }
+  </style>
+</head>
+<body class="page-dashboard">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="dash-wrap" data-testid="operator-dashboard">
+
+      <div class="dash-header-bar">
+        <div>
+          <div class="dash-access-badge dash-access-operator" data-testid="operator-access-badge">✈️ Airline Operator Portal</div>
+          <h1 class="dash-title" id="dash-title">Operator Dashboard</h1>
+          <p class="dash-subtitle" id="dash-subtitle">Loading airline details…</p>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="dash-grid">
+        <div class="dash-card" data-testid="operator-stat-flights">
+          <div class="dash-card-title">Total flights</div>
+          <div class="dash-card-value" id="stat-flights"> - </div>
+          <div class="dash-card-sub">in inventory</div>
+        </div>
+        <div class="dash-card" data-testid="operator-stat-routes">
+          <div class="dash-card-title">Active routes</div>
+          <div class="dash-card-value" id="stat-routes"> - </div>
+          <div class="dash-card-sub">origin–destination pairs</div>
+        </div>
+        <div class="dash-card" data-testid="operator-stat-avg-price">
+          <div class="dash-card-title">Avg price</div>
+          <div class="dash-card-value" id="stat-avg-price"> - </div>
+          <div class="dash-card-sub">per flight (AUD)</div>
+        </div>
+        <div class="dash-card" data-testid="operator-stat-avg-seats">
+          <div class="dash-card-title">Avg seats available</div>
+          <div class="dash-card-value" id="stat-avg-seats"> - </div>
+          <div class="dash-card-sub">across inventory</div>
+        </div>
+      </div>
+
+      <!-- Flight inventory table -->
+      <section aria-labelledby="flights-heading">
+        <h2 class="dash-section-title" id="flights-heading">Flight inventory</h2>
+        <div class="dash-table-wrap" data-testid="operator-flights-table">
+          <table class="dash-table">
+            <thead>
+              <tr>
+                <th>Flight No.</th>
+                <th>Route</th>
+                <th>Depart time</th>
+                <th>Duration</th>
+                <th>Stops</th>
+                <th>Price</th>
+                <th>Seats</th>
+                <th>Class</th>
+              </tr>
+            </thead>
+            <tbody id="flights-tbody">
+              <tr><td colspan="8" style="text-align:center;color:var(--clr-text-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Coupons -->
+      <section aria-labelledby="coupons-heading" data-testid="operator-coupons">
+        <h2 class="dash-section-title" id="coupons-heading">Operator offers</h2>
+        <div class="coupon-strip" id="coupon-strip">
+          <div class="coupon-strip-heading">Loading offers…</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2024 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      renderAuthNav();
+
+      const user = getCurrentUser();
+      if (!user || user.role !== 'airline_operator') {
+        window.location.href = 'login?returnTo=operator-dashboard';
+        return;
+      }
+
+      document.getElementById('dash-title').textContent = `${user.airlineName || 'Airline'} Dashboard`;
+      document.getElementById('dash-subtitle').textContent =
+        `${user.airlineName || ' - '} (${user.airlineCode || ' - '}) -  ${user.department || 'Operations'}`;
+
+      // Read flights from in-memory DB
+      let flights = [];
+      let displayFlights = [];
+      try {
+        flights = Array.isArray(_DB.flights) ? _DB.flights : [];
+        displayFlights = flights.filter(f =>
+          f.airline && user.airlineName &&
+          f.airline.toLowerCase() === user.airlineName.toLowerCase()
+        );
+        if (displayFlights.length === 0) displayFlights = flights.slice(0, 20);
+      } catch (_) {}
+
+      // Stats
+      const count = displayFlights.length;
+      const routes = new Set(displayFlights.map(f => `${f.origin}-${f.destination}`));
+      const avgPrice = count > 0
+        ? Math.round(displayFlights.reduce((s, f) => s + (f.price || 0), 0) / count)
+        : 0;
+      const avgSeats = count > 0
+        ? Math.round(displayFlights.reduce((s, f) => s + (f.seatsAvailable || f.seats || 0), 0) / count)
+        : 0;
+
+      document.getElementById('stat-flights').textContent = count;
+      document.getElementById('stat-routes').textContent = routes.size;
+      document.getElementById('stat-avg-price').textContent = avgPrice ? `$${avgPrice.toLocaleString()}` : ' - ';
+      document.getElementById('stat-avg-seats').textContent = avgSeats || ' - ';
+
+      // Flights table
+      const tbody = document.getElementById('flights-tbody');
+      if (displayFlights.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--clr-text-muted);">No flights found</td></tr>';
+      } else {
+        tbody.innerHTML = displayFlights.map(f => `
+          <tr data-testid="flight-row-${f.flightNumber}">
+            <td><strong>${f.flightNumber}</strong></td>
+            <td>${f.origin} → ${f.destination}</td>
+            <td>${f.departureTime || f.departTime || ' - '}</td>
+            <td>${f.duration || ' - '}</td>
+            <td>${f.stops !== undefined ? f.stops : ' - '}</td>
+            <td>$${(f.price || 0).toLocaleString()}</td>
+            <td>${f.seatsAvailable ?? f.seats ?? ' - '}</td>
+            <td>${f.cabinClass || f.class || 'Economy'}</td>
+          </tr>`).join('');
+      }
+
+      // Coupons
+      const strip = document.getElementById('coupon-strip');
+      try {
+        const coupons = await getCoupons('airline_operator');
+        if (coupons.length === 0) {
+          strip.innerHTML = '<div class="coupon-strip-heading">No offers available at this time.</div>';
+        } else {
+          strip.innerHTML = `
+            <div class="coupon-strip-heading">Exclusive operator offers</div>
+            ${coupons.map(c => `
+              <div class="coupon-card" data-testid="coupon-card-${c.id}">
+                <span class="coupon-icon" aria-hidden="true">🏷️</span>
+                <div class="coupon-body">
+                  <div class="coupon-code" title="Click to copy" data-code="${c.code}" data-testid="coupon-code-${c.id}" style="cursor:pointer;">${c.code}</div>
+                  <div class="coupon-desc">${c.description}</div>
+                  <div class="coupon-terms">${c.terms || ''}</div>
+                </div>
+                <span class="coupon-badge">${c.discountType === 'percentage' ? c.discountValue + '% off' : c.discountType === 'fixed' ? '$' + c.discountValue + ' off' : 'Upgrade'}</span>
+              </div>`).join('')}`;
+          strip.querySelectorAll('.coupon-code[data-code]').forEach(el => {
+            el.addEventListener('click', () => {
+              navigator.clipboard.writeText(el.dataset.code).catch(() => {});
+              const orig = el.textContent;
+              el.textContent = 'Copied!';
+              setTimeout(() => { el.textContent = orig; }, 1500);
+            });
+          });
+        }
+      } catch (_) {
+        strip.innerHTML = '<div class="coupon-strip-heading">Unable to load offers.</div>';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "luxfly",
+  "version": "1.0.0",
+  "description": "Luxfly — Travel search practice app for Playwright MCP vs CLI workshop",
+  "scripts": {
+    "serve": "serve public -p 3000",
+    "start": "pnpm run serve",
+    "test": "pnpm exec playwright test",
+    "test:ui": "pnpm exec playwright test --ui",
+    "test:headed": "pnpm exec playwright test --headed",
+    "test:report": "pnpm exec playwright show-report",
+    "playwright:install": "pnpm exec playwright install"
+  },
+  "devDependencies": {
+    "@playwright/cli": "latest",
+    "@playwright/mcp": "latest",
+    "@playwright/test": "latest",
+    "msw": "^3.0.2",
+    "playwright": "latest",
+    "serve": "^14.2.3"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

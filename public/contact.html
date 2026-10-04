@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Luxfly Contact Us</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    :root {
+      --bg: #F7F4EF; --bg-card: #FFFFFF; --fg: #1A1714;
+      --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --gold-light: #F2D898;
+      --navy: #0E1E35; --navy-mid: #1C3252;
+      --border: #E2DDD7; --radius: 14px;
+      --display: 'Playfair Display', Georgia, serif;
+      --body: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+        --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+        --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+        --border: #262C38; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+      --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+      --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+      --border: #262C38; color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    body { font-family: var(--body); background: var(--bg); color: var(--fg); font-size: 16px; line-height: 1.6; overflow-x: hidden; padding-top: 33px; }
+
+    /* ── NAV ─────────────────────────────────────────────────── */
+    .site-header {
+      position: sticky; top: 33px; z-index: 50;
+      background: rgba(14,30,53,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,148,58,0.2);
+    }
+    .header-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: clamp(8px,2vw,12px) clamp(16px,5vw,64px);
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      display: flex; align-items: center; justify-content: space-between; min-height: clamp(56px, 10vw, 72px);
+    }
+    .logo { font-family: var(--display); font-size: 24px; font-weight: 700; color: #fff; text-decoration: none; letter-spacing: -0.5px; }
+    .logo-icon { color: var(--gold); margin-right: 4px; }
+    .header-nav { display: flex; align-items: center; gap: 24px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; background: none; border: none; cursor: pointer; font-family: var(--body); padding: 0; }
+    .nav-link:hover { color: #fff; }
+    .nav-link.active { color: #fff; }
+    .nav-user-chip { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .nav-role-badge { background: rgba(201,148,58,0.25); color: var(--gold); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .nav-login-btn { background: var(--gold); color: #fff !important; padding: 7px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+    .nav-logout-btn { font-size: 13px; color: rgba(255,255,255,0.5) !important; }
+
+    /* ── HERO ─────────────────────────────────────────────────── */
+    .page-hero {
+      background: var(--navy);
+      padding: clamp(48px,8vw,80px) clamp(16px,5vw,64px) clamp(40px,6vw,64px);
+      border-bottom: 1px solid rgba(201,148,58,0.2);
+    }
+    .page-hero-inner { max-width: 1100px; margin: 0 auto; }
+    .page-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+    .page-title { font-family: var(--display); font-size: clamp(32px,6vw,52px); font-weight: 700; color: #fff; line-height: 1.15; text-wrap: balance; }
+    .page-sub { margin-top: 14px; font-size: 17px; color: rgba(255,255,255,0.6); max-width: 52ch; }
+
+    /* ── LAYOUT ──────────────────────────────────────────────── */
+    .content-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(40px,6vw,72px) clamp(16px,5vw,64px);
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 48px;
+      align-items: start;
+    }
+    @media (max-width: 800px) {
+      .content-wrap { grid-template-columns: 1fr; }
+      .contact-sidebar { order: -1; }
+    }
+
+    /* ── FORM ─────────────────────────────────────────────────── */
+    .form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(28px,4vw,40px);
+    }
+    .form-title { font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--fg); margin-bottom: 6px; }
+    .form-sub { font-size: 14px; color: var(--fg-muted); margin-bottom: 28px; }
+
+    .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .field-label { font-size: 13px; font-weight: 600; color: var(--fg); letter-spacing: 0.01em; }
+    .field-label .req { color: var(--gold); margin-left: 2px; }
+    .field-input, .field-select, .field-textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      background: var(--bg); color: var(--fg);
+      font-family: var(--body); font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 15%, transparent);
+    }
+    .field-textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+    .field-error { font-size: 12px; color: #d04040; min-height: 16px; }
+    .field-input.is-error, .field-textarea.is-error { border-color: #d04040; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .field-row { grid-template-columns: 1fr; } }
+
+    .btn-submit {
+      width: 100%; padding: 14px;
+      background: var(--gold); color: #fff;
+      border: none; border-radius: 10px;
+      font-family: var(--body); font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s, transform 0.1s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.9; }
+    .btn-submit:active { transform: scale(0.99); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ── SUCCESS STATE ────────────────────────────────────────── */
+    .success-state {
+      text-align: center; padding: 40px 20px;
+    }
+    .success-icon { font-size: 48px; margin-bottom: 16px; }
+    .success-heading { font-family: var(--display); font-size: 24px; font-weight: 700; color: var(--fg); margin-bottom: 10px; }
+    .success-msg { font-size: 15px; color: var(--fg-mid); margin-bottom: 24px; max-width: 36ch; margin-left: auto; margin-right: auto; }
+    .btn-back { display: inline-block; padding: 11px 24px; background: var(--navy); color: #fff; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none; cursor: pointer; border: none; font-family: var(--body); }
+
+    /* ── SIDEBAR ──────────────────────────────────────────────── */
+    .contact-sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+    .info-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px 28px;
+    }
+    .info-card-heading {
+      font-family: var(--display); font-size: 17px; font-weight: 700;
+      color: var(--fg); margin-bottom: 16px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .info-item { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+    .info-item:last-child { margin-bottom: 0; }
+    .info-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border-radius: 8px; background: color-mix(in srgb, var(--gold) 12%, var(--bg));
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .info-text-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted); margin-bottom: 3px; }
+    .info-text-val { font-size: 14px; font-weight: 500; color: var(--fg); }
+    .info-text-note { font-size: 12px; color: var(--fg-muted); margin-top: 2px; }
+
+    .hours-grid { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; font-size: 13px; }
+    .hours-day { color: var(--fg-mid); }
+    .hours-time { color: var(--fg); font-weight: 500; }
+
+    .topics-list { display: flex; flex-direction: column; gap: 10px; }
+    .topic-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 8px;
+      background: var(--bg); border: 1px solid var(--border);
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .topic-item:hover { border-color: var(--gold); }
+    .topic-icon { font-size: 18px; }
+    .topic-label { font-size: 14px; font-weight: 500; color: var(--fg); }
+    .topic-sub { font-size: 12px; color: var(--fg-muted); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    .site-footer { background: var(--navy); border-top: 1px solid rgba(201,148,58,0.15); padding: 32px clamp(16px,5vw,64px); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.4); }
+    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-link { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .footer-link:hover, .footer-link.active { color: var(--gold); }
+  </style>
+</head>
+<body>
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo"><span class="logo-icon">✦</span>Luxfly</a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link">Search flights</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-eyebrow">Support</div>
+      <h1 class="page-title">Get in touch</h1>
+      <p class="page-sub">Our team is here to help with bookings, account queries, and anything else you need.</p>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- ── FORM COLUMN ───────────────────────────────────────── -->
+    <div>
+      <div class="form-card">
+        <h2 class="form-title">Send us a message</h2>
+        <p class="form-sub">We aim to respond within one business day.</p>
+
+        <form id="contact-form" novalidate>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label" for="cf-first">First name <span class="req">*</span></label>
+              <input type="text" id="cf-first" name="firstName" class="field-input" placeholder="Alex" autocomplete="given-name" />
+              <span class="field-error" id="err-first" role="alert" aria-live="polite"></span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="cf-last">Last name <span class="req">*</span></label>
+              <input type="text" id="cf-last" name="lastName" class="field-input" placeholder="Smith" autocomplete="family-name" />
+              <span class="field-error" id="err-last" role="alert" aria-live="polite"></span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cf-email">Email address <span class="req">*</span></label>
+            <input type="email" id="cf-email" name="email" class="field-input" placeholder="alex@example.com" autocomplete="email" />
+            <span class="field-error" id="err-email" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cf-booking">Booking reference <span style="color:var(--fg-muted);font-weight:400;">(optional)</span></label>
+            <input type="text" id="cf-booking" name="bookingRef" class="field-input" placeholder="e.g. TW-AB1234" autocomplete="off" style="text-transform:uppercase;" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cf-topic">Topic <span class="req">*</span></label>
+            <select id="cf-topic" name="topic" class="field-input field-select">
+              <option value=""> -  Select a topic - </option>
+              <option value="booking">Booking or ticketing</option>
+              <option value="change">Change or cancellation</option>
+              <option value="refund">Refund or payment</option>
+              <option value="account">Account access</option>
+              <option value="baggage">Baggage query</option>
+              <option value="feedback">Feedback or compliment</option>
+              <option value="other">Something else</option>
+            </select>
+            <span class="field-error" id="err-topic" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="cf-message">Message <span class="req">*</span></label>
+            <textarea id="cf-message" name="message" class="field-textarea" placeholder="Tell us how we can help…"></textarea>
+            <span class="field-error" id="err-message" role="alert" aria-live="polite"></span>
+          </div>
+
+          <button type="submit" class="btn-submit" id="cf-submit">Send message</button>
+
+        </form>
+
+        <!-- Success state (hidden initially) -->
+        <div class="success-state" id="contact-success" hidden>
+          <div class="success-icon">✈️</div>
+          <h3 class="success-heading">Message sent!</h3>
+          <p class="success-msg">Thanks for reaching out. We'll get back to you at your email address within one business day.</p>
+          <button class="btn-back" id="cf-reset">Send another message</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR COLUMN ────────────────────────────────────── -->
+    <aside class="contact-sidebar">
+
+      <div class="info-card">
+        <h2 class="info-card-heading">Contact details</h2>
+        <div class="info-item">
+          <div class="info-icon">📞</div>
+          <div>
+            <div class="info-text-label">Phone</div>
+            <div class="info-text-val">1800 589 247</div>
+            <div class="info-text-note">Free call within Australia</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">✉️</div>
+          <div>
+            <div class="info-text-label">Email</div>
+            <div class="info-text-val">support@luxfly.com.au</div>
+            <div class="info-text-note">Replies within one business day</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-text-label">Office</div>
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h2 class="info-card-heading">Support hours</h2>
+        <div class="hours-grid">
+          <span class="hours-day">Mon – Fri</span><span class="hours-time">8:00 am – 8:00 pm AEST</span>
+          <span class="hours-day">Saturday</span><span class="hours-time">9:00 am – 5:00 pm AEST</span>
+          <span class="hours-day">Sunday</span><span class="hours-time">10:00 am – 4:00 pm AEST</span>
+          <span class="hours-day">Public holidays</span><span class="hours-time">Limited cover</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h2 class="info-card-heading">Common topics</h2>
+        <div class="topics-list">
+          <div class="topic-item">
+            <span class="topic-icon">🎫</span>
+            <div>
+              <div class="topic-label">Manage my booking</div>
+              <div class="topic-sub">Change, cancel, or view your itinerary</div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <span class="topic-icon">💳</span>
+            <div>
+              <div class="topic-label">Refunds and payments</div>
+              <div class="topic-sub">Refund status and payment queries</div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <span class="topic-icon">🔑</span>
+            <div>
+              <div class="topic-label">Account access</div>
+              <div class="topic-sub">Sign-in issues and account settings</div>
+            </div>
+          </div>
+          <div class="topic-item">
+            <span class="topic-icon">🧳</span>
+            <div>
+              <div class="topic-label">Baggage allowance</div>
+              <div class="topic-sub">Checked bags, carry-on, and excess</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-copy">&copy; 2026 Luxfly Pty Ltd. All rights reserved.</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="privacy.html" class="footer-link">Privacy</a>
+        <a href="terms.html" class="footer-link">Terms</a>
+        <a href="contact.html" class="footer-link active">Contact</a>
+        <a href="index.html" class="footer-link">Search flights</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="js/app.js?v=3"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderAuthNav();
+
+      const form      = document.getElementById('contact-form');
+      const successEl = document.getElementById('contact-success');
+      const submitBtn = document.getElementById('cf-submit');
+      const resetBtn  = document.getElementById('cf-reset');
+
+      function getEl(id) { return document.getElementById(id); }
+      function setErr(errId, inputEl, msg) {
+        getEl(errId).textContent = msg;
+        inputEl.classList.add('is-error');
+      }
+      function clearErr(errId, inputEl) {
+        getEl(errId).textContent = '';
+        inputEl.classList.remove('is-error');
+      }
+
+      // Live clear on input
+      [['cf-first','err-first'],['cf-last','err-last'],['cf-email','err-email'],['cf-topic','err-topic'],['cf-message','err-message']].forEach(([inputId, errId]) => {
+        getEl(inputId).addEventListener('input', () => clearErr(errId, getEl(inputId)));
+      });
+
+      function validate() {
+        let ok = true;
+        const first   = getEl('cf-first');
+        const last    = getEl('cf-last');
+        const email   = getEl('cf-email');
+        const topic   = getEl('cf-topic');
+        const message = getEl('cf-message');
+
+        if (!first.value.trim())  { setErr('err-first',   first,   'First name is required.'); ok = false; }
+        else clearErr('err-first', first);
+
+        if (!last.value.trim())   { setErr('err-last',    last,    'Last name is required.'); ok = false; }
+        else clearErr('err-last', last);
+
+        if (!email.value.trim())  { setErr('err-email',   email,   'Email address is required.'); ok = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { setErr('err-email', email, 'Enter a valid email address.'); ok = false; }
+        else clearErr('err-email', email);
+
+        if (!topic.value)         { setErr('err-topic',   topic,   'Please select a topic.'); ok = false; }
+        else clearErr('err-topic', topic);
+
+        if (!message.value.trim()) { setErr('err-message', message, 'Please enter a message.'); ok = false; }
+        else if (message.value.trim().length < 10) { setErr('err-message', message, 'Message is too short.'); ok = false; }
+        else clearErr('err-message', message);
+
+        return ok;
+      }
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        if (!validate()) return;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+
+        // Simulate send delay
+        setTimeout(() => {
+          form.hidden = true;
+          successEl.hidden = false;
+        }, 900);
+      });
+
+      resetBtn.addEventListener('click', () => {
+        form.reset();
+        form.hidden = false;
+        successEl.hidden = true;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send message';
+        // Clear all errors
+        [['cf-first','err-first'],['cf-last','err-last'],['cf-email','err-email'],['cf-topic','err-topic'],['cf-message','err-message']].forEach(([inputId, errId]) => {
+          clearErr(errId, getEl(inputId));
+        });
+      });
+    });
+  </script>
+</body>
+</html>

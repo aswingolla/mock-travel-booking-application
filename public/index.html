@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxfly -  Find Your Flight</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* ── Design tokens ─────────────────────────────────────── */
+    :root {
+      --bg:         #F7F4EF;
+      --bg-card:    #FFFFFF;
+      --fg:         #1A1714;
+      --fg-mid:     #5C5752;
+      --fg-muted:   #9A948E;
+      --gold:       #C9943A;
+      --gold-light: #F2D898;
+      --navy:       #0E1E35;
+      --navy-mid:   #1C3252;
+      --border:     #E2DDD7;
+      --radius:     14px;
+      --display:    'Playfair Display', Georgia, serif;
+      --body:       'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+        --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+        --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+        --border: #262C38; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --bg-card: #161C26; --fg: #F0EBE3;
+      --fg-mid: #A09A93; --fg-muted: #6B6560; --gold: #D4A84B;
+      --gold-light: #3D2E10; --navy: #0A1624; --navy-mid: #132034;
+      --border: #262C38; color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+    [hidden] { display: none !important; }
+
+    body {
+      font-family: var(--body);
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-top: 33px;
+    }
+
+    /* ── NAV ──────────────────────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 33px;
+      z-index: 50;
+      background: rgba(14,30,53,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201,148,58,0.2);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: clamp(8px,2vw,12px) clamp(16px,5vw,64px);
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: clamp(56px, 10vw, 72px);
+    }
+    .logo {
+      font-family: var(--display);
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+    }
+    .logo .logo-icon { color: var(--gold); margin-right: 4px; }
+    .logo .logo-text {}
+
+    .header-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 28px;
+    }
+    .nav-link {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--body);
+      padding: 0;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link.active { color: #fff; }
+
+    /* Auth chip (injected by renderAuthNav) */
+    .nav-user-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+    }
+    .nav-role-badge {
+      background: rgba(201,148,58,0.25);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .nav-login-btn {
+      background: var(--gold);
+      color: #fff !important;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .nav-logout-btn {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5) !important;
+    }
+    .nav-dashboard { color: rgba(255,255,255,0.8) !important; }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+      padding: clamp(60px,10vw,110px) clamp(16px,5vw,64px) clamp(80px,12vw,130px);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 72% 8%,  rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 35%, rgba(255,255,255,0.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 55%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 70%, rgba(255,255,255,0.25) 0%, transparent 100%),
+        radial-gradient(2px 2px at 60% 15%, rgba(201,148,58,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 50%,  rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 95% 30%, rgba(255,255,255,0.35) 0%, transparent 100%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 200px;
+      background: linear-gradient(to top, rgba(201,148,58,0.12), transparent);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-heading {
+      font-family: var(--display);
+      font-size: clamp(38px,5.5vw,66px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+      color: #fff;
+      text-wrap: balance;
+      margin-bottom: 20px;
+    }
+    .hero-heading em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.65;
+      max-width: 440px;
+      margin-bottom: 36px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 44px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-val {
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* ── SEARCH CARD ──────────────────────────────────────── */
+    .search-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 8px 24px rgba(0,0,0,0.2);
+    }
+
+    .trip-tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 20px;
+      border: none;
+    }
+    .trip-tab {
+      flex: 1;
+      padding: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--fg-mid);
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: var(--body);
+      transition: all 0.2s;
+    }
+    .trip-tab.active, .trip-tab[aria-selected="true"] {
+      background: var(--bg-card);
+      color: var(--fg);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .search-form { display: flex; flex-direction: column; gap: 0; }
+    .search-fields { display: flex; flex-direction: column; gap: 10px; }
+
+    .field-group { display: flex; flex-direction: column; gap: 5px; }
+    .field-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--fg-muted);
+    }
+    .field-input, .field-select {
+      width: 100%;
+      padding: 11px 14px;
+      font-size: 14px;
+      font-family: var(--body);
+      color: var(--fg);
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field-input:focus, .field-select:focus { border-color: var(--gold); }
+    .field-input.is-error, .field-select.is-error { border-color: #ef4444; }
+    .field-error { font-size: 12px; color: #ef4444; min-height: 14px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    /* When return date is hidden, depart date spans full row (toggled via JS) */
+    .field-row.one-way { grid-template-columns: 1fr; }
+
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '▾';
+      position: absolute;
+      right: 12px; top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-size: 11px;
+      color: var(--fg-muted);
+    }
+
+    /* Swap button */
+    .swap-wrapper { display: flex; justify-content: flex-end; margin: -4px 0; }
+    .btn-swap {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; cursor: pointer; color: var(--fg-mid);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-swap:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Passenger dropdown */
+    .pax-summary-btn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+    .pax-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      z-index: 100;
+    }
+    .pax-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .pax-row:last-of-type { border-bottom: none; }
+    .pax-info { display: flex; flex-direction: column; }
+    .pax-type { font-size: 14px; font-weight: 500; color: var(--fg); }
+    .pax-age  { font-size: 12px; color: var(--fg-muted); }
+    .pax-counter { display: flex; align-items: center; gap: 12px; }
+    .pax-btn {
+      width: 30px; height: 30px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 18px; line-height: 1;
+      cursor: pointer; font-family: var(--body);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .pax-btn:hover { border-color: var(--gold); }
+    .pax-count { font-size: 15px; font-weight: 600; min-width: 20px; text-align: center; color: var(--fg); }
+
+    /* Search submit */
+    .search-action { margin-top: 14px; }
+    .btn-search {
+      width: 100%;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--body);
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-search:hover { background: #b8862e; transform: translateY(-1px); }
+
+    /* ── DESTINATIONS ─────────────────────────────────────── */
+    .destinations-section {
+      padding: clamp(56px,8vw,96px) clamp(16px,5vw,64px);
+      background: var(--bg);
+    }
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px; height: 1px;
+      background: var(--gold);
+    }
+    .section-heading {
+      font-family: var(--display);
+      font-size: clamp(28px,4vw,46px);
+      font-weight: 400;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      text-wrap: balance;
+      color: var(--fg);
+      margin-bottom: 12px;
+    }
+    .section-heading em { font-style: italic; color: var(--gold); }
+    .section-sub {
+      font-size: 16px;
+      color: var(--fg-mid);
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .dest-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      position: relative;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .dest-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+    }
+    .dest-visual {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dest-visual .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.45), transparent 60%);
+    }
+    .dest-body { padding: 18px 20px 20px; }
+    .dest-name {
+      font-family: var(--display);
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--fg);
+      margin-bottom: 2px;
+    }
+    .dest-route { font-size: 12px; color: var(--fg-muted); margin-bottom: 12px; }
+    .dest-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .price-from { font-size: 11px; color: var(--fg-muted); }
+    .price-val {
+      font-family: var(--display);
+      font-size: clamp(20px, 5vw, 26px);
+      font-weight: 700;
+      color: var(--fg);
+      font-variant-numeric: tabular-nums;
+    }
+    .price-suffix { font-size: 12px; color: var(--fg-muted); margin-left: 3px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .badge-gold  { background: rgba(201,148,58,0.15); color: var(--gold); }
+    .badge-blue  { background: rgba(29,111,164,0.12); color: #1D6FA4; }
+    .badge-coral { background: rgba(220,80,60,0.1);   color: #C94033; }
+
+    /* ── FEATURES (dark) ──────────────────────────────────── */
+    .features-section {
+      background: var(--navy);
+      padding: clamp(56px,8vw,96px) clamp(16px,5vw,64px);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .feature-item {
+      padding: 40px 32px;
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.2s;
+    }
+    .feature-item:last-child { border-right: none; }
+    .feature-item:hover { background: rgba(255,255,255,0.06); }
+    .feature-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      background: rgba(201,148,58,0.15);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px;
+    }
+    .feature-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .feature-body { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; }
+
+    /* Airlines row */
+    .airlines-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .airline-chip {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ── GOLD CTA BANNER ──────────────────────────────────── */
+    .brand-section {
+      background: var(--gold);
+      padding: clamp(48px,6vw,72px) clamp(16px,5vw,64px);
+    }
+    .brand-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .brand-tagline {
+      font-family: var(--display);
+      font-size: clamp(24px,3.5vw,40px);
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .brand-tagline em { font-style: italic; opacity: 0.85; }
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: var(--body);
+      transition: opacity 0.2s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    .site-footer {
+      background: #090D15;
+      padding: 40px clamp(16px,5vw,64px);
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .footer-logo {
+      font-family: var(--display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .footer-logo span { color: var(--gold); }
+    .footer-copy { font-size: 13px; color: rgba(255,255,255,0.35); }
+    .footer-nav { display: flex; gap: 24px; list-style: none; padding: 0; }
+    .footer-link { color: rgba(255,255,255,0.35); font-size: 13px; text-decoration: none; }
+    .footer-link:hover { color: rgba(255,255,255,0.7); }
+
+    /* ── RESPONSIVE ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .search-card {
+        width: 100%;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+      .dest-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feature-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+      .feature-item:last-child { border-bottom: none; }
+      .hero-stats { gap: 20px; flex-wrap: wrap; }
+      .brand-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .dest-grid { grid-template-columns: 1fr; }
+      .field-row { grid-template-columns: 1fr; }
+      .header-nav .nav-link[data-testid="nav-deals"],
+      .header-nav .nav-link[data-testid="nav-help"] { display: none; }
+      .hero-stats { gap: 16px; }
+      .stat-val { font-size: 22px; }
+      .hero-heading { letter-spacing: -0.5px; }
+      .search-card { padding: 20px 16px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer-nav { flex-wrap: wrap; gap: 16px; }
+    }
+    @media (max-width: 400px) {
+      .header-nav { gap: 14px; }
+      .logo { font-size: 22px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body class="page-home">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <!-- ── HEADER ─────────────────────────────────────── -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span><span>Lux</span><span style="color:var(--gold)">fly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link active" aria-current="page" data-testid="nav-search">Search</a>
+        <a href="#destinations" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── HERO ───────────────────────────────────────── -->
+  <main id="main-content">
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-inner">
+
+        <!-- Left: copy -->
+        <div>
+          <div class="hero-eyebrow">Flight search reimagined</div>
+          <h1 class="hero-heading" id="hero-heading">
+            Your dream trip,<br>at the <em>right price.</em>
+          </h1>
+          <p class="hero-sub">
+            Search 50 airlines, 146 routes, every dream destination -  without the noise, the pop-ups, or the pressure. Just you and a fare worth smiling about.
+          </p>
+          <div class="hero-stats">
+            <div>
+              <div class="stat-val">50</div>
+              <div class="stat-label">Airlines</div>
+            </div>
+            <div>
+              <div class="stat-val">136</div>
+              <div class="stat-label">Destinations</div>
+            </div>
+            <div>
+              <div class="stat-val">146</div>
+              <div class="stat-label">Routes</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: search card -->
+        <div class="search-card" role="search" aria-label="Flight search" id="search">
+
+          <!-- Trip tabs -->
+          <div class="trip-tabs" role="tablist" aria-label="Trip type">
+            <button id="tab-oneway" class="trip-tab active" role="tab"
+              aria-selected="true" aria-controls="search-form"
+              data-testid="tab-one-way" data-trip="one-way"
+              onclick="activateTab('one-way')">One way</button>
+            <button id="tab-return" class="trip-tab" role="tab"
+              aria-selected="false" aria-controls="search-form"
+              data-testid="tab-return" data-trip="return"
+              onclick="activateTab('return')">Return</button>
+          </div>
+
+          <form id="search-form" class="search-form" novalidate data-testid="search-form">
+            <div class="search-fields">
+
+              <!-- Origin -->
+              <div class="field-group" data-testid="field-origin">
+                <label for="origin" class="field-label">From</label>
+                <div class="select-wrapper">
+                  <select id="origin" name="origin" class="field-select"
+                    aria-label="Departure airport" aria-required="true"
+                    data-testid="select-origin">
+                    <option value="">Select origin</option>
+                  </select>
+                </div>
+                <span id="origin-error" class="field-error" role="alert" aria-live="polite" data-testid="error-origin"></span>
+              </div>
+
+              <!-- Swap -->
+              <div class="swap-wrapper" aria-hidden="true">
+                <button type="button" class="btn-swap"
+                  aria-label="Swap origin and destination" data-testid="btn-swap">⇄</button>
+              </div>
+
+              <!-- Destination -->
+              <div class="field-group" data-testid="field-destination">
+                <label for="destination" class="field-label">To</label>
+                <div class="select-wrapper">
+                  <select id="destination" name="destination" class="field-select"
+                    aria-label="Arrival airport" aria-required="true"
+                    data-testid="select-destination">
+                    <option value="">Select destination</option>
+                  </select>
+                </div>
+                <span id="destination-error" class="field-error" role="alert" aria-live="polite" data-testid="error-destination"></span>
+              </div>
+
+              <!-- Dates -->
+              <div class="field-row one-way">
+                <div class="field-group" data-testid="field-depart">
+                  <label for="depart-date" class="field-label">Depart</label>
+                  <input type="date" id="depart-date" name="departDate" class="field-input"
+                    aria-label="Departure date" aria-required="true"
+                    data-testid="input-depart-date" />
+                  <span id="depart-error" class="field-error" role="alert" aria-live="polite" data-testid="error-depart"></span>
+                </div>
+                <div class="field-group" id="return-date-group" data-testid="field-return" aria-hidden="true" hidden>
+                  <label for="return-date" class="field-label">Return</label>
+                  <input type="date" id="return-date" name="returnDate" class="field-input"
+                    aria-label="Return date" data-testid="input-return-date" tabindex="-1" />
+                  <span id="return-error" class="field-error" role="alert" aria-live="polite" data-testid="error-return"></span>
+                </div>
+              </div>
+
+              <!-- Passengers -->
+              <div class="field-group" data-testid="field-passengers" style="position:relative;">
+                <label class="field-label">Passengers</label>
+                <button type="button" id="pax-toggle" class="field-input pax-summary-btn"
+                  aria-haspopup="true" aria-expanded="false" aria-controls="pax-dropdown"
+                  data-testid="btn-passengers-toggle">
+                  <span id="pax-summary" data-testid="pax-summary">1 adult</span>
+                  <span aria-hidden="true" style="font-size:10px;color:var(--fg-muted);">▾</span>
+                </button>
+                <div id="pax-dropdown" class="pax-dropdown" role="group"
+                  aria-label="Passenger counts" data-testid="pax-dropdown" hidden>
+                  <div class="pax-row" data-testid="pax-row-adults">
+                    <div class="pax-info">
+                      <span class="pax-type" data-testid="pax-label-adults">Adults</span>
+                      <span class="pax-age">16+</span>
+                    </div>
+                    <div class="pax-counter">
+                      <button type="button" class="pax-btn" data-type="adults" data-action="dec" aria-label="Remove adult" data-testid="btn-adults-dec">−</button>
+                      <span class="pax-count" id="count-adults" data-testid="count-adults">1</span>
+                      <button type="button" class="pax-btn" data-type="adults" data-action="inc" aria-label="Add adult" data-testid="btn-adults-inc">+</button>
+                    </div>
+                  </div>
+                  <div class="pax-row" data-testid="pax-row-children">
+                    <div class="pax-info">
+                      <span class="pax-type" data-testid="pax-label-children">Children</span>
+                      <span class="pax-age">2–15</span>
+                    </div>
+                    <div class="pax-counter">
+                      <button type="button" class="pax-btn" data-type="children" data-action="dec" aria-label="Remove child" data-testid="btn-children-dec">−</button>
+                      <span class="pax-count" id="count-children" data-testid="count-children">0</span>
+                      <button type="button" class="pax-btn" data-type="children" data-action="inc" aria-label="Add child" data-testid="btn-children-inc">+</button>
+                    </div>
+                  </div>
+                  <div class="pax-row" data-testid="pax-row-infants">
+                    <div class="pax-info">
+                      <span class="pax-type" data-testid="pax-label-infants">Infants</span>
+                      <span class="pax-age">Under 2</span>
+                    </div>
+                    <div class="pax-counter">
+                      <button type="button" class="pax-btn" data-type="infants" data-action="dec" aria-label="Remove infant" data-testid="btn-infants-dec">−</button>
+                      <span class="pax-count" id="count-infants" data-testid="count-infants">0</span>
+                      <button type="button" class="pax-btn" data-type="infants" data-action="inc" aria-label="Add infant" data-testid="btn-infants-inc">+</button>
+                    </div>
+                  </div>
+                  <button type="button" id="pax-done" class="btn-search"
+                    style="width:100%;margin-top:10px;padding:10px;"
+                    data-testid="btn-passengers-done">Done</button>
+                </div>
+                <input type="hidden" id="pax-adults"   name="adultsCount"   value="1" data-testid="input-adults-count">
+                <input type="hidden" id="pax-children" name="childrenCount" value="0" data-testid="input-children-count">
+                <input type="hidden" id="pax-infants"  name="infantsCount"  value="0" data-testid="input-infants-count">
+              </div>
+
+              <!-- Class -->
+              <div class="field-group" data-testid="field-class">
+                <label for="cabin-class" class="field-label">Class</label>
+                <div class="select-wrapper">
+                  <select id="cabin-class" name="cabinClass" class="field-select"
+                    aria-label="Cabin class" data-testid="select-cabin-class">
+                    <option value="Economy">Economy</option>
+                    <option value="Business">Business</option>
+                    <option value="First">First</option>
+                  </select>
+                </div>
+              </div>
+
+            </div><!-- /.search-fields -->
+
+            <div class="search-action">
+              <button type="submit" class="btn-search" aria-label="Search flights" data-testid="btn-search">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <circle cx="7" cy="7" r="4.5" stroke="white" stroke-width="1.8"/>
+                  <path d="M10.5 10.5L14 14" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+                Search flights
+              </button>
+            </div>
+          </form>
+
+        </div><!-- /.search-card -->
+      </div><!-- /.hero-inner -->
+    </section>
+
+    <!-- ── DESTINATIONS ────────────────────────────────── -->
+    <section class="destinations-section" id="destinations" aria-labelledby="dest-heading">
+      <div class="section-inner">
+        <div class="eyebrow">Top picks</div>
+        <h2 class="section-heading" id="dest-heading">Bucket list trips, <em>real prices</em></h2>
+        <p class="section-sub">Hand-picked routes our travellers love -  direct flights where possible, always the best available fare.</p>
+
+        <div class="dest-grid" data-testid="popular-routes">
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('MEL','DPS','Economy')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('MEL','DPS','Economy')}"
+            aria-label="Search flights from Melbourne to Bali"
+            data-testid="dest-card-DPS">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#1a6b4a,#0d3d28);">
+              🌺
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-gold">Best value</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">Bali, Indonesia</div>
+              <div class="dest-route">MEL → DPS · Garuda Nusantara · Direct</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$389</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-blue">Direct</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('MEL','NRT','First')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('MEL','NRT','First')}"
+            aria-label="Search flights from Melbourne to Tokyo"
+            data-testid="dest-card-NRT">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#8b1a1a,#3d0a0a);">
+              ⛩️
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-blue">Direct</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">Tokyo, Japan</div>
+              <div class="dest-route">MEL → NRT · Nippon Air Lines · Direct</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$890</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-gold">First class avail.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('SYD','CDG','Business')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('SYD','CDG','Business')}"
+            aria-label="Search flights from Sydney to Paris"
+            data-testid="dest-card-CDG">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#0d3b5e,#061d30);">
+              🗼
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-coral">3 seats left</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">Paris, France</div>
+              <div class="dest-route">SYD → CDG · Auster Airways · 1 stop</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$1,649</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-gold">Business avail.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('MEL','PPT','Economy')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('MEL','PPT','Economy')}"
+            aria-label="Search flights from Melbourne to Tahiti"
+            data-testid="dest-card-PPT">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#05618c,#023048);">
+              🏝️
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-gold">Bucket list</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">Tahiti, French Polynesia</div>
+              <div class="dest-route">MEL → PPT · Pacific Skies · via Auckland</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$849</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-blue">Economy</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('SYD','JFK','First')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('SYD','JFK','First')}"
+            aria-label="Search flights from Sydney to New York"
+            data-testid="dest-card-JFK">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#1a1a3e,#0d0d24);">
+              🗽
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-blue">Direct</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">New York, USA</div>
+              <div class="dest-route">SYD → JFK · Auster Airways · 17h non-stop</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$1,650</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-gold">First class avail.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dest-card" role="button" tabindex="0"
+            onclick="luxflyCardClick('SYD','DXB','Economy')"
+            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();luxflyCardClick('SYD','DXB','Economy')}"
+            aria-label="Search flights from Sydney to Dubai"
+            data-testid="dest-card-DXB">
+            <div class="dest-visual" style="background:linear-gradient(135deg,#4a2a0a,#261505);">
+              🕌
+              <div class="overlay"></div>
+              <div style="position:absolute;top:14px;left:14px;"><span class="badge badge-gold">Best value</span></div>
+            </div>
+            <div class="dest-body">
+              <div class="dest-name">Dubai, UAE</div>
+              <div class="dest-route">SYD → DXB · Auster Airways · via Singapore</div>
+              <div class="dest-price-row">
+                <div>
+                  <div class="price-from">From</div>
+                  <div><span class="price-val">$1,089</span><span class="price-suffix">return</span></div>
+                </div>
+                <span class="badge badge-blue">Economy</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FEATURES (dark) ────────────────────────────── -->
+    <section class="features-section" aria-labelledby="features-heading">
+      <div class="section-inner">
+        <div class="eyebrow" style="color:var(--gold);">Why Luxfly</div>
+        <h2 class="section-heading" id="features-heading" style="color:#fff;margin-bottom:48px;">
+          Everything you need.<br><em>Nothing you don't.</em>
+        </h2>
+        <div class="features-grid">
+          <div class="feature-item" data-testid="feature-best-price">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                <path d="M11 2L2 7.5l9 5.5 9-5.5L11 2z" stroke="#C9943A" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M2 14.5l9 5.5 9-5.5" stroke="#C9943A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-title">Real best prices</div>
+            <div class="feature-body">We search budget carriers, full-service airlines, and everything between. No paid placements pushing bad deals to the top.</div>
+          </div>
+          <div class="feature-item" data-testid="feature-no-fees">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="9" stroke="#C9943A" stroke-width="1.8"/>
+                <path d="M11 2a13 13 0 0 1 0 18M11 2a13 13 0 0 0 0 18" stroke="#C9943A" stroke-width="1.8"/>
+                <path d="M2 11h18" stroke="#C9943A" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="feature-title">136 destinations</div>
+            <div class="feature-body">Bali, Tokyo, Tahiti, New York, Paris, Santorini. Every bucket list destination covered across six continents.</div>
+          </div>
+          <div class="feature-item" data-testid="feature-support">
+            <div class="feature-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+                <path d="M4 11l5 5L18 6" stroke="#C9943A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="feature-title">Two-minute booking</div>
+            <div class="feature-body">Clear prices, no hidden fees, a checkout that takes two minutes. Finding a great flight should be the best part of the trip.</div>
+          </div>
+        </div>
+
+        <div style="margin-top:56px;">
+          <div class="eyebrow" style="color:rgba(255,255,255,0.35);margin-bottom:16px;">50 airlines including</div>
+          <div class="airlines-row">
+            <span class="airline-chip">Auster Airways</span>
+            <span class="airline-chip">Emiria</span>
+            <span class="airline-chip">Singapura Air</span>
+            <span class="airline-chip">Nippon Air Lines</span>
+            <span class="airline-chip">Cathay Horizon</span>
+            <span class="airline-chip">Bleu Ciel Air</span>
+            <span class="airline-chip">Britannia Airways</span>
+            <span class="airline-chip">AirNova Zealand</span>
+            <span class="airline-chip">Garuda Nusantara</span>
+            <span class="airline-chip">Air Tahiti Bleu</span>
+            <span class="airline-chip">Crescent Air</span>
+            <span class="airline-chip">Lufthaven Air</span>
+            <span class="airline-chip">+ 38 more</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── GOLD CTA ─────────────────────────────────────── -->
+    <div class="brand-section">
+      <div class="brand-inner">
+        <div class="brand-tagline">Your dream trip, at the <em>right price.</em></div>
+        <a href="#search" class="btn-white">Search flights free →</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Lux<span>fly</span></div>
+      <p class="footer-copy">&copy; 2026 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="privacy.html" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="terms.html" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="contact.html" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script src="js/search.js?v=2"></script>
+</body>
+</html>

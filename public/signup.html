@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account -  Luxfly</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    /* ── Luxfly design system -  inner pages ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    :root {
+      --bg: #F7F4EF; --fg: #1A1714; --fg-mid: #5C5752; --fg-muted: #9A948E;
+      --gold: #C9943A; --navy: #0E1E35; --navy-light: #142843;
+      --border: #E2DDD7; --surface: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+        --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+        --border: #262C38; --surface: #161C26; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0E1117; --fg: #F0EBE3; --fg-mid: #A09A93; --fg-muted: #6B6560;
+      --gold: #D4A84B; --navy: #0A1628; --navy-light: #111D30;
+      --border: #262C38; --surface: #161C26; color-scheme: dark;
+    }
+    body { background: var(--bg); color: var(--fg); margin: 0; }
+
+    /* Header */
+    .site-header { background: var(--navy) !important; border-bottom: 1px solid rgba(201,148,58,0.25) !important; }
+    .logo { color: var(--gold) !important; font-family: 'Playfair Display', Georgia, serif !important; }
+    .logo-icon, .logo-text { color: var(--gold) !important; }
+    .nav-link { color: rgba(255,255,255,0.8) !important; }
+    .nav-link:hover { color: var(--gold) !important; }
+
+    /* Footer */
+    .site-footer { background: #090D15 !important; border-top: 1px solid rgba(255,255,255,0.07) !important; }
+    .footer-copy, .footer-link { color: rgba(255,255,255,0.45) !important; }
+    .footer-link:hover { color: var(--gold) !important; }
+
+    /* Auth wrap / card */
+    .page-signup { background: var(--bg) !important; }
+    .auth-wrap { background: var(--bg) !important; }
+    .auth-card {
+      background: var(--surface) !important;
+      border: 1px solid var(--border) !important;
+      border-radius: 20px !important;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.07) !important;
+    }
+    .auth-heading { font-family: 'Playfair Display', Georgia, serif !important; color: var(--fg) !important; }
+    .auth-sub { color: var(--fg-muted) !important; }
+
+    /* Role grid */
+    .role-label {
+      background: var(--surface) !important;
+      border: 2px solid var(--border) !important;
+      border-radius: 12px !important;
+      transition: border-color 0.15s, background 0.15s !important;
+    }
+    .role-option:checked + .role-label {
+      border-color: var(--gold) !important;
+      background: color-mix(in srgb, var(--gold) 10%, var(--surface)) !important;
+    }
+    .role-label:hover { border-color: var(--gold) !important; }
+    .role-desc { color: var(--fg-muted) !important; }
+
+    /* Form fields */
+    .field-label { color: var(--fg-mid) !important; font-weight: 600 !important; font-size: 0.82rem !important; }
+    .field-input {
+      background: var(--surface) !important;
+      border-color: var(--border) !important;
+      color: var(--fg) !important;
+      border-radius: 10px !important;
+    }
+    .field-input:focus { border-color: var(--gold) !important; outline: none !important; box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 20%, transparent) !important; }
+    .field-error { color: #dc2626 !important; }
+
+    /* Submit button */
+    .btn.btn-primary, .btn-primary, .auth-submit {
+      background: var(--gold) !important;
+      color: #fff !important;
+      border: none !important;
+      border-radius: 10px !important;
+      font-weight: 600 !important;
+    }
+    .btn.btn-primary:hover, .auth-submit:hover { opacity: 0.88 !important; }
+
+    /* Footer link */
+    .auth-footer { color: var(--fg-muted) !important; }
+    .auth-footer a { color: var(--gold) !important; font-weight: 500 !important; }
+  </style>
+</head>
+<body class="page-signup">
+  <div style="background:#1a1200;color:#f5c842;text-align:center;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;padding:7px 16px;position:fixed;top:0;left:0;right:0;z-index:9999;border-bottom:1px solid rgba(245,200,66,0.25);">⚠️ MOCK APPLICATION -  For testing workshop use only. No real bookings are made.</div>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo" aria-label="Luxfly home" data-testid="logo">
+        <span class="logo-icon" aria-hidden="true">✈</span>
+        <span class="logo-text">Luxfly</span>
+      </a>
+      <nav class="header-nav" aria-label="Site navigation">
+        <a href="index.html" class="nav-link" data-testid="nav-search">Search</a>
+        <a href="#" class="nav-link" data-testid="nav-deals">Deals</a>
+        <a href="contact.html" class="nav-link" data-testid="nav-help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="auth-wrap">
+      <div class="auth-card" data-testid="signup-card">
+
+        <h1 class="auth-heading" data-testid="signup-heading">Create your account</h1>
+        <p class="auth-sub">Join Luxfly to book flights and access exclusive offers.</p>
+
+        <form id="signup-form" class="auth-form" novalidate data-testid="signup-form">
+
+          <!-- Role selection -->
+          <fieldset style="border:none;padding:0;margin:0;">
+            <legend class="field-label" style="margin-bottom:8px;">I am a…</legend>
+            <div class="role-grid" data-testid="role-grid">
+
+              <input type="radio" name="role" id="role-passenger" value="passenger"
+                class="role-option" checked data-testid="radio-role-passenger" />
+              <label for="role-passenger" class="role-label" data-testid="label-role-passenger">
+                <span class="role-icon" aria-hidden="true">🧳</span>
+                <span>Passenger</span>
+                <span class="role-desc">Book flights for personal travel</span>
+              </label>
+
+              <input type="radio" name="role" id="role-agent" value="travel_agent"
+                class="role-option" data-testid="radio-role-travel-agent" />
+              <label for="role-agent" class="role-label" data-testid="label-role-travel-agent">
+                <span class="role-icon" aria-hidden="true">🏢</span>
+                <span>Travel Agent</span>
+                <span class="role-desc">Book on behalf of clients</span>
+              </label>
+
+
+            </div>
+          </fieldset>
+
+          <!-- Name -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="field-group" data-testid="field-signup-firstname">
+              <label for="su-firstname" class="field-label">First name</label>
+              <input type="text" id="su-firstname" name="firstName" class="field-input"
+                placeholder="First name" autocomplete="given-name"
+                aria-required="true" data-testid="input-signup-firstname" />
+              <span id="err-firstname" class="field-error" role="alert" aria-live="polite" data-testid="error-signup-firstname"></span>
+            </div>
+            <div class="field-group" data-testid="field-signup-lastname">
+              <label for="su-lastname" class="field-label">Last name</label>
+              <input type="text" id="su-lastname" name="lastName" class="field-input"
+                placeholder="Last name" autocomplete="family-name"
+                aria-required="true" data-testid="input-signup-lastname" />
+              <span id="err-lastname" class="field-error" role="alert" aria-live="polite" data-testid="error-signup-lastname"></span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field-group" data-testid="field-signup-email">
+            <label for="su-email" class="field-label">Email address</label>
+            <input type="email" id="su-email" name="email" class="field-input"
+              placeholder="you@example.com" autocomplete="email"
+              aria-required="true" data-testid="input-signup-email" />
+            <span id="err-email" class="field-error" role="alert" aria-live="polite" data-testid="error-signup-email"></span>
+          </div>
+
+          <!-- Password -->
+          <div class="field-group" data-testid="field-signup-password">
+            <label for="su-password" class="field-label">Password</label>
+            <input type="password" id="su-password" name="password" class="field-input"
+              placeholder="Minimum 8 characters" autocomplete="new-password"
+              aria-required="true" data-testid="input-signup-password" />
+            <span id="err-password" class="field-error" role="alert" aria-live="polite" data-testid="error-signup-password"></span>
+          </div>
+
+          <!-- Role-specific extra fields (shown dynamically) -->
+          <div id="extra-fields" hidden>
+            <!-- Travel agent fields -->
+            <div id="agent-fields" hidden>
+              <div class="field-group" data-testid="field-agency-name">
+                <label for="su-agency" class="field-label">Agency name</label>
+                <input type="text" id="su-agency" name="agencyName" class="field-input"
+                  placeholder="Your travel agency" data-testid="input-agency-name" />
+              </div>
+              <div class="field-group" data-testid="field-agency-code" style="margin-top:10px;">
+                <label for="su-agencycode" class="field-label">Agency code</label>
+                <input type="text" id="su-agencycode" name="agencyCode" class="field-input"
+                  placeholder="e.g. AGT-XYZ-001" data-testid="input-agency-code" />
+              </div>
+            </div>
+          </div>
+
+          <span id="err-global" class="field-error" role="alert" aria-live="polite" data-testid="error-signup-global"></span>
+
+          <button type="submit" class="btn btn-primary auth-submit" data-testid="btn-signup-submit">
+            Create account
+          </button>
+
+        </form>
+
+        <p class="auth-footer" data-testid="signup-login-link">
+          Already have an account? <a href="login.html">Sign in</a>
+        </p>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo" data-testid="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Luxfly. Practice app for testing workshops.</p>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="#" class="footer-link" data-testid="footer-privacy">Privacy</a>
+        <a href="#" class="footer-link" data-testid="footer-terms">Terms</a>
+        <a href="#" class="footer-link" data-testid="footer-contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+    <script src="js/msw-iife.js"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/msw-handlers.js?v=1"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form       = document.getElementById('signup-form');
+      const extraEl    = document.getElementById('extra-fields');
+      const agentEl    = document.getElementById('agent-fields');
+      const operatorEl = document.getElementById('operator-fields');
+      const adminEl    = document.getElementById('admin-fields');
+
+      function updateExtraFields() {
+        const role = form.role.value;
+        const isExtra = ['travel_agent','airline_operator','admin'].includes(role);
+        if (extraEl)    extraEl.hidden    = !isExtra;
+        if (agentEl)    agentEl.hidden    = role !== 'travel_agent';
+        if (operatorEl) operatorEl.hidden = role !== 'airline_operator';
+        if (adminEl)    adminEl.hidden    = role !== 'admin';
+      }
+
+      form.querySelectorAll('[name="role"]').forEach(r => r.addEventListener('change', updateExtraFields));
+      updateExtraFields();
+
+      function setErr(id, msg) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = msg; if (msg) el.previousElementSibling?.classList.add('is-error'); }
+      }
+      function clearErr(id) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = ''; el.previousElementSibling?.classList.remove('is-error'); }
+      }
+
+      // Attach submit listener synchronously so it's ready before MSW is even loaded
+      // Set flag so tests can wait for the listener to be attached
+      form.__listenerAttached = true;
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
+        clearErr('err-firstname'); clearErr('err-lastname');
+        clearErr('err-email'); clearErr('err-password'); clearErr('err-global');
+
+        let ok = true;
+        if (!form.firstName.value.trim())  { setErr('err-firstname', 'First name is required.'); ok = false; }
+        if (!form.lastName.value.trim())   { setErr('err-lastname',  'Last name is required.');  ok = false; }
+        if (!form.email.value.trim())      { setErr('err-email', 'Email is required.'); ok = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value)) { setErr('err-email', 'Enter a valid email.'); ok = false; }
+        if (!form.password.value || form.password.value.length < 8) { setErr('err-password', 'Password must be at least 8 characters.'); ok = false; }
+        if (!ok) return;
+
+        const role = form.role.value;
+        const data = {
+          email:     form.email.value.trim(),
+          password:  form.password.value,
+          firstName: form.firstName.value.trim(),
+          lastName:  form.lastName.value.trim(),
+          role,
+        };
+        if (role === 'travel_agent') {
+          data.agencyName  = form.agencyName?.value?.trim() || '';
+          data.agencyCode  = form.agencyCode?.value?.trim() || '';
+          data.commissionRate = 8;
+        }
+
+        const btn = form.querySelector('[data-testid="btn-signup-submit"]');
+        btn.disabled = true; btn.textContent = 'Creating account…';
+
+        try {
+          // Wait for MSW before making the API call
+          await waitForMSW();
+          const user = await registerUser(data);
+          // Redirect to dashboard, or returnTo param, or home
+          const dash = ROLE_DASHBOARD[user.role];
+          if (dash) { window.location.href = dash; return; }
+          const returnTo = new URLSearchParams(window.location.search).get('returnTo');
+          window.location.href = returnTo || '/';
+        } catch (err) {
+          setErr('err-global', err.message || 'Registration failed. Please try again.');
+          btn.disabled = false; btn.textContent = 'Create account';
+        }
+      });
+
+      // Run async init (auth nav, redirect check) after attaching the submit listener
+      (async () => {
+        await waitForMSW();
+        renderAuthNav();
+        const me = getCurrentUser();
+        if (me) window.location.href = '/';
+      })();
+    });
+  </script>
+</body>
+</html>
